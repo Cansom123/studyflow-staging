@@ -1,0 +1,2497 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>StudyFlow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<script type="application/json" id="tweak-defaults">{"accent":"275","cardRadius":"14","fontScale":"1"}</script>
+<style>
+/* ===== TOKENS ===== */
+:root {
+  --accent-h: 275;
+  --accent:        oklch(0.56 0.2  var(--accent-h));
+  --accent-mid:    oklch(0.62 0.18 var(--accent-h));
+  --accent-soft:   oklch(0.56 0.2  var(--accent-h) / 0.11);
+  --accent-text:   oklch(0.56 0.2  var(--accent-h));
+
+  --green:         oklch(0.52 0.16 145);
+  --green-soft:    oklch(0.52 0.16 145 / 0.12);
+  --amber:         oklch(0.58 0.18 72);
+  --amber-soft:    oklch(0.58 0.18 72 / 0.12);
+  --red:           oklch(0.52 0.2  22);
+  --red-soft:      oklch(0.52 0.2  22 / 0.12);
+  --purple:        oklch(0.52 0.17 305);
+  --purple-soft:   oklch(0.52 0.17 305 / 0.12);
+
+  --bg:            oklch(0.975 0.008 var(--accent-h));
+  --surface:       #ffffff;
+  --surface2:      oklch(0.965 0.008 var(--accent-h));
+  --border:        oklch(0.91 0.012 var(--accent-h));
+  --border2:       oklch(0.945 0.008 var(--accent-h));
+  --text1:         oklch(0.14 0.02  var(--accent-h));
+  --text2:         oklch(0.52 0.02  var(--accent-h));
+  --input-bg:      oklch(0.97 0.007 var(--accent-h));
+  --input-focus-bg:#fff;
+
+  --shadow-sm:     0 1px 2px oklch(0.14 0.02 var(--accent-h) / 0.05),
+                   0 2px 6px oklch(0.14 0.02 var(--accent-h) / 0.04);
+  --shadow-md:     0 2px 8px oklch(0.14 0.02 var(--accent-h) / 0.07),
+                   0 6px 20px oklch(0.14 0.02 var(--accent-h) / 0.05);
+
+  --btn-secondary-bg:   oklch(0.95 0.01 var(--accent-h));
+  --btn-secondary-color:var(--text1);
+  --ai-bg:              oklch(0.95 0.03 var(--accent-h));
+  --ai-border:          oklch(0.84 0.07 var(--accent-h));
+  --ai-label:           var(--accent);
+  --ai-text:            oklch(0.38 0.1 var(--accent-h));
+  --goal-tag-bg:        var(--accent-soft);
+  --goal-tag-text:      var(--accent-text);
+  --connected-bg:       var(--green-soft);
+  --connected-color:    var(--green);
+  --sync-btn-bg:        var(--green-soft);
+  --sync-btn-color:     var(--green);
+  --sync-btn-border:    oklch(0.52 0.16 145 / 0.28);
+  --disconnect-bg:      var(--red-soft);
+  --disconnect-color:   var(--red);
+  --disconnect-border:  oklch(0.52 0.2 22 / 0.28);
+  --success-bg:         var(--green-soft);
+  --success-color:      var(--green);
+  --error-bg:           var(--red-soft);
+  --error-color:        var(--red);
+  --grade-sep:          var(--border);
+  --grade-letter-bg:    var(--surface2);
+
+  --card-radius: 14px;
+  --font-scale: 1;
+}
+
+[data-theme="dark"] {
+  --bg:            oklch(0.10 0.015 var(--accent-h));
+  --surface:       oklch(0.15 0.015 var(--accent-h));
+  --surface2:      oklch(0.20 0.015 var(--accent-h));
+  --border:        oklch(0.26 0.018 var(--accent-h));
+  --border2:       oklch(0.22 0.015 var(--accent-h));
+  --text1:         oklch(0.95 0.008 var(--accent-h));
+  --text2:         oklch(0.58 0.022 var(--accent-h));
+  --input-bg:      oklch(0.19 0.015 var(--accent-h));
+  --input-focus-bg:oklch(0.23 0.016 var(--accent-h));
+  --shadow-sm:     0 1px 2px #0006, 0 2px 6px #0004;
+  --shadow-md:     0 2px 8px #0008, 0 6px 20px #0005;
+
+  --accent:        oklch(0.68 0.18 var(--accent-h));
+  --accent-mid:    oklch(0.72 0.16 var(--accent-h));
+  --accent-soft:   oklch(0.68 0.18 var(--accent-h) / 0.16);
+  --accent-text:   oklch(0.68 0.18 var(--accent-h));
+  --green:         oklch(0.65 0.15 145);
+  --green-soft:    oklch(0.65 0.15 145 / 0.16);
+  --amber:         oklch(0.72 0.16 72);
+  --amber-soft:    oklch(0.72 0.16 72 / 0.16);
+  --red:           oklch(0.65 0.18 22);
+  --red-soft:      oklch(0.65 0.18 22 / 0.16);
+  --purple:        oklch(0.68 0.15 305);
+  --purple-soft:   oklch(0.68 0.15 305 / 0.16);
+
+  --btn-secondary-bg:    oklch(0.22 0.016 var(--accent-h));
+  --btn-secondary-color: var(--text1);
+  --ai-bg:               oklch(0.68 0.18 var(--accent-h) / 0.14);
+  --ai-border:           oklch(0.68 0.18 var(--accent-h) / 0.3);
+  --ai-label:            var(--accent);
+  --ai-text:             oklch(0.8 0.1 var(--accent-h));
+  --goal-tag-bg:         var(--accent-soft);
+  --goal-tag-text:       var(--accent-text);
+  --connected-bg:        var(--green-soft);
+  --connected-color:     var(--green);
+  --sync-btn-bg:         var(--green-soft);
+  --sync-btn-color:      var(--green);
+  --sync-btn-border:     oklch(0.65 0.15 145 / 0.35);
+  --disconnect-bg:       var(--red-soft);
+  --disconnect-color:    var(--red);
+  --disconnect-border:   oklch(0.65 0.18 22 / 0.35);
+  --success-bg:          var(--green-soft);
+  --success-color:       var(--green);
+  --error-bg:            var(--red-soft);
+  --error-color:         var(--red);
+  --grade-sep:           var(--border);
+  --grade-letter-bg:     var(--surface2);
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: calc(var(--font-scale, 1) * 16px); }
+body {
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  display: flex; justify-content: center;
+  padding: 20px;
+  color: var(--text1);
+  transition: background 0.25s, color 0.25s;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+.app { width: 100%; max-width: 430px; min-height: 100vh; }
+
+/* ===== LOGO ===== */
+.logo { display: flex; align-items: center; gap: 9px; }
+.logo-mark {
+  width: 32px; height: 32px;
+  background: var(--accent);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px var(--accent) / 0.35;
+}
+.logo-mark svg { width: 18px; height: 18px; }
+.logo-word { font-size: 19px; font-weight: 700; color: var(--text1); letter-spacing: -0.4px; }
+.logo-word em { font-style: normal; color: var(--accent); }
+.topbar-logo .logo-mark { width: 28px; height: 28px; border-radius: 8px; }
+.topbar-logo .logo-mark svg { width: 15px; height: 15px; }
+.topbar-logo .logo-word { font-size: 17px; }
+
+/* ===== AUTH ===== */
+.auth-screen {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 36px 28px;
+  margin-top: 48px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+}
+.auth-logo { margin-bottom: 8px; }
+.auth-sub { font-size: 14px; color: var(--text2); margin-bottom: 28px; line-height: 1.5; }
+.auth-label {
+  font-size: 11px; font-weight: 600; color: var(--text2);
+  text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; display: block;
+}
+.auth-input {
+  width: 100%; padding: 12px 15px;
+  border-radius: 12px; border: 1px solid var(--border);
+  font-size: 15px; color: var(--text1);
+  background: var(--input-bg); margin-bottom: 14px; outline: none;
+  font-family: inherit; transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.auth-input:focus {
+  border-color: var(--accent);
+  background: var(--input-focus-bg);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.auth-btn {
+  width: 100%; padding: 14px;
+  border-radius: 12px; background: var(--accent);
+  color: #fff; font-size: 15px; font-weight: 600;
+  border: none; cursor: pointer; margin-top: 4px; font-family: inherit;
+  letter-spacing: -0.1px;
+  transition: opacity 0.15s, transform 0.1s, box-shadow 0.15s;
+  box-shadow: 0 2px 10px var(--accent) / 0.3;
+}
+.auth-btn:hover { opacity: 0.9; box-shadow: 0 4px 16px var(--accent) / 0.4; }
+.auth-btn:active { transform: scale(0.98); }
+.auth-btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+.auth-switch { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text2); }
+.auth-switch a { color: var(--accent); cursor: pointer; font-weight: 600; text-decoration: none; }
+
+.msg-error {
+  background: var(--red-soft); border-radius: 10px;
+  padding: 10px 13px; font-size: 13px; color: var(--red);
+  margin-bottom: 14px; border: 1px solid oklch(0.52 0.2 22 / 0.2);
+}
+.msg-success {
+  background: var(--green-soft); border-radius: 10px;
+  padding: 10px 13px; font-size: 13px; color: var(--green);
+  margin-bottom: 14px; border: 1px solid oklch(0.52 0.16 145 / 0.2);
+}
+
+/* ===== ONBOARDING ===== */
+.onboard-screen {
+  background: var(--surface); border-radius: 20px;
+  padding: 28px 24px; margin-top: 20px;
+  border: 1px solid var(--border); box-shadow: var(--shadow-md); display: none;
+}
+.onboard-step { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+.onboard-title { font-size: 22px; font-weight: 700; color: var(--text1); margin-bottom: 6px; letter-spacing: -0.3px; }
+.onboard-sub { font-size: 14px; color: var(--text2); margin-bottom: 24px; line-height: 1.55; }
+.onboard-btn {
+  width: 100%; padding: 13px; border-radius: 12px;
+  background: var(--accent); color: #fff; font-size: 15px; font-weight: 600;
+  border: none; cursor: pointer; margin-top: 8px; font-family: inherit;
+  transition: opacity 0.15s; box-shadow: 0 2px 10px var(--accent) / 0.28;
+}
+.onboard-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.onboard-btn-secondary {
+  width: 100%; padding: 13px; border-radius: 12px;
+  background: var(--btn-secondary-bg); color: var(--btn-secondary-color);
+  font-size: 15px; font-weight: 500; border: none; cursor: pointer;
+  margin-top: 8px; font-family: inherit; transition: background 0.15s;
+}
+
+.progress-dots { display: flex; gap: 7px; justify-content: center; margin-bottom: 26px; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border2); transition: all 0.2s; }
+.dot.active { background: var(--accent); width: 18px; border-radius: 3px; }
+
+.course-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; background: var(--input-bg);
+  border-radius: 12px; margin-bottom: 8px; cursor: pointer;
+  border: 1.5px solid transparent; transition: all 0.15s;
+}
+.course-item.selected { background: var(--accent-soft); border-color: var(--accent); }
+.course-check {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 1.5px solid var(--border); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+}
+.course-item.selected .course-check { background: var(--accent); border-color: var(--accent); }
+.course-check-inner { width: 8px; height: 8px; border-radius: 50%; background: #fff; display: none; }
+.course-item.selected .course-check-inner { display: block; }
+.course-name { font-size: 14px; font-weight: 500; color: var(--text1); }
+.course-loading { text-align: center; padding: 20px; color: var(--text2); font-size: 14px; }
+.course-section-title { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.07em; margin: 12px 0 8px; }
+.previous-courses-toggle {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; padding: 12px 14px; background: var(--input-bg);
+  border-radius: 12px; border: none; cursor: pointer;
+  font-size: 13px; font-weight: 600; color: var(--text2); margin-top: 8px; font-family: inherit;
+}
+.previous-courses-toggle .arrow { transition: transform 0.15s; }
+.previous-courses-toggle.open .arrow { transform: rotate(90deg); }
+.previous-courses-list { display: none; margin-top: 8px; }
+.previous-courses-list.open { display: block; }
+
+.goal-input-row { display: flex; gap: 8px; margin-bottom: 8px; }
+.goal-input {
+  flex: 1; padding: 11px 14px; border-radius: 12px;
+  border: 1px solid var(--border); font-size: 14px; color: var(--text1);
+  background: var(--input-bg); outline: none; font-family: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.goal-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.goal-add-btn {
+  padding: 11px 16px; border-radius: 12px;
+  background: var(--accent); color: #fff; font-size: 14px; font-weight: 600;
+  border: none; cursor: pointer; font-family: inherit;
+}
+.goal-tag {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--accent-soft); border-radius: 10px;
+  padding: 9px 12px; margin-bottom: 8px;
+}
+.goal-tag-text { font-size: 13px; color: var(--text1); flex: 1; font-weight: 500; }
+.goal-tag-remove { font-size: 20px; color: var(--text2); cursor: pointer; background: none; border: none; line-height: 1; opacity: 0.6; }
+
+/* ===== MAIN APP ===== */
+.main-app { display: none; }
+
+.topbar {
+  background: var(--surface);
+  padding: 13px 18px 11px;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  position: sticky; top: 0; z-index: 100;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+.topbar-right { display: flex; align-items: center; gap: 6px; }
+.topbar-sub { font-size: 10.5px; color: var(--text2); margin-top: 1.5px; letter-spacing: 0.01em; }
+
+.theme-btn {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--surface2); border: 1px solid var(--border);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; transition: background 0.15s;
+}
+.theme-btn:hover { background: var(--btn-secondary-bg); }
+.signout-btn {
+  font-size: 12.5px; color: var(--text2); cursor: pointer;
+  background: none; border: none; font-weight: 500; font-family: inherit;
+  padding: 5px 9px; border-radius: 8px; transition: color 0.15s, background 0.15s;
+}
+.signout-btn:hover { color: var(--red); background: var(--red-soft); }
+
+.tabs {
+  display: flex; background: var(--surface);
+  border-bottom: 1px solid var(--border); overflow-x: auto;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  flex-shrink: 0; padding: 11px 14px; font-size: 13px; font-weight: 500;
+  color: var(--text2); cursor: pointer;
+  border-bottom: 2px solid transparent; white-space: nowrap;
+  font-family: inherit; transition: color 0.15s; background: none; border-top: none; border-left: none; border-right: none;
+}
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.content { padding: 16px 16px 24px; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* ===== SECTION LABELS ===== */
+.section-label {
+  font-size: 10.5px; font-weight: 700; color: var(--text2);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 10px; margin-top: 22px;
+}
+.section-label:first-child { margin-top: 0; }
+
+/* ===== CARDS ===== */
+.card {
+  background: var(--surface);
+  border-radius: var(--card-radius);
+  border: 1px solid var(--border);
+  padding: 13px 15px; margin-bottom: 9px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s;
+}
+.card-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.card-title { font-size: 14px; font-weight: 500; color: var(--text1); line-height: 1.4; }
+.card-sub { font-size: 11.5px; color: var(--text2); margin-top: 2px; }
+
+.badge {
+  font-size: 10px; padding: 3px 8px; border-radius: 99px;
+  white-space: nowrap; font-weight: 700; letter-spacing: 0.03em; flex-shrink: 0;
+}
+.badge-test       { background: var(--red-soft);    color: var(--red);    }
+.badge-hw         { background: var(--accent-soft);  color: var(--accent-text); }
+.badge-quiz       { background: var(--amber-soft);   color: var(--amber);  }
+.badge-essay      { background: var(--green-soft);   color: var(--green);  }
+.badge-discussion { background: var(--purple-soft);  color: var(--purple); }
+
+.due-soon { color: var(--red); font-size: 12px; font-weight: 500; margin-top: 6px; }
+.due-ok   { color: var(--text2); font-size: 12px; margin-top: 6px; }
+
+.card.overdue-card {
+  border-color: oklch(0.52 0.2 22 / 0.28);
+  background: linear-gradient(135deg, var(--surface) 0%, oklch(0.52 0.2 22 / 0.035) 100%);
+}
+.overdue-pill {
+  display: inline-block; font-size: 9px; font-weight: 700;
+  color: var(--red); background: var(--red-soft); border-radius: 4px;
+  padding: 2px 5px; margin-left: 5px; vertical-align: middle; letter-spacing: 0.04em;
+}
+.card.done { opacity: 0.42; }
+.card.done .card-title { text-decoration: line-through; }
+.done-check {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 1.5px solid var(--border); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; background: none; transition: all 0.18s; padding: 0;
+}
+.done-check.checked { background: var(--green); border-color: var(--green); }
+.done-check-icon { font-size: 11px; color: #fff; display: none; line-height: 1; }
+.done-check.checked .done-check-icon { display: block; }
+
+/* Stats */
+.stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.stat-card {
+  background: var(--surface); border-radius: var(--card-radius);
+  padding: 15px 16px; border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+}
+.stat-label { font-size: 10.5px; color: var(--text2); margin-bottom: 5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+.stat-val { font-size: 30px; font-weight: 700; color: var(--text1); letter-spacing: -0.5px; line-height: 1; }
+
+/* ===== PRIORITY ===== */
+.priority-card {
+  background: var(--surface); border-radius: var(--card-radius);
+  border: 1px solid var(--border); padding: 13px 15px; margin-bottom: 9px;
+  display: flex; align-items: center; gap: 11px; box-shadow: var(--shadow-sm);
+}
+.priority-num {
+  width: 26px; height: 26px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; flex-shrink: 0;
+}
+.p1 { background: oklch(0.52 0.2  22  / 0.14); color: oklch(0.52 0.2  22 ); }
+.p2 { background: oklch(0.58 0.18 38  / 0.14); color: oklch(0.58 0.18 38 ); }
+.p3 { background: oklch(0.58 0.18 72  / 0.14); color: oklch(0.58 0.18 72 ); }
+.p4 { background: oklch(0.56 0.2  var(--accent-h) / 0.14); color: var(--accent); }
+.p5 { background: oklch(0.52 0.16 145 / 0.14); color: oklch(0.52 0.16 145); }
+[data-theme="dark"] .p1 { background: oklch(0.65 0.18 22  / 0.2); color: oklch(0.65 0.18 22 ); }
+[data-theme="dark"] .p2 { background: oklch(0.70 0.16 38  / 0.2); color: oklch(0.70 0.16 38 ); }
+[data-theme="dark"] .p3 { background: oklch(0.72 0.16 72  / 0.2); color: oklch(0.72 0.16 72 ); }
+[data-theme="dark"] .p4 { background: oklch(0.68 0.18 var(--accent-h) / 0.2); color: var(--accent); }
+[data-theme="dark"] .p5 { background: oklch(0.65 0.15 145 / 0.2); color: oklch(0.65 0.15 145); }
+
+.priority-check {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1.5px solid var(--border); background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0; font-size: 13px; color: transparent;
+  transition: all 0.18s;
+}
+.priority-check:hover { border-color: var(--green); color: var(--green); background: var(--green-soft); }
+.priority-completed-section { margin-top: 20px; }
+.priority-completed-label { font-size: 10.5px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
+.priority-card.completed-card { opacity: 0.48; }
+.priority-card.completed-card .card-title { text-decoration: line-through; }
+.priority-info { flex: 1; min-width: 0; }
+
+/* AI box */
+.ai-box {
+  background: var(--ai-bg); border-radius: var(--card-radius);
+  border: 1px solid var(--ai-border); padding: 14px 16px; margin-bottom: 18px;
+}
+.ai-label {
+  font-size: 10px; font-weight: 700; color: var(--ai-label);
+  text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 6px;
+}
+.ai-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); display: inline-block;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+.ai-text { font-size: 13px; color: var(--ai-text); line-height: 1.55; }
+
+/* ===== GOALS ===== */
+.goal-card {
+  background: var(--surface); border-radius: var(--card-radius);
+  border: 1px solid var(--border); padding: 15px 16px;
+  margin-bottom: 10px; box-shadow: var(--shadow-sm);
+}
+.goal-row { display: flex; align-items: flex-start; gap: 10px; }
+.goal-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.goal-text { font-size: 14px; font-weight: 600; color: var(--text1); flex: 1; line-height: 1.4; }
+.goal-remove { background: none; border: none; color: var(--text2); font-size: 18px; cursor: pointer; opacity: 0.5; line-height: 1; margin-top: -1px; }
+.goal-remove:hover { color: var(--red); opacity: 1; }
+.goal-plan { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 7px; }
+.goal-step { font-size: 13px; color: var(--text2); line-height: 1.45; display: flex; gap: 7px; }
+.goal-step-arrow { color: var(--accent); font-weight: 700; flex-shrink: 0; }
+.add-goal-row { display: flex; gap: 8px; margin-top: 12px; }
+.add-goal-input {
+  flex: 1; padding: 11px 13px; border-radius: 12px;
+  border: 1px solid var(--border); font-size: 13px; color: var(--text1);
+  background: var(--input-bg); outline: none; font-family: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.add-goal-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.add-goal-btn {
+  padding: 11px 14px; border-radius: 12px; background: var(--accent);
+  color: #fff; font-size: 13px; font-weight: 600; border: none; cursor: pointer; font-family: inherit;
+}
+
+/* ===== GRADES ===== */
+.grade-card {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; margin-bottom: 9px;
+  background: var(--surface); border-radius: var(--card-radius);
+  border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+}
+.grade-card-left { flex: 1; min-width: 0; padding-right: 12px; }
+.grade-card-name { font-size: 14px; font-weight: 500; color: var(--text1); }
+.grade-bar-wrap { height: 3px; border-radius: 99px; background: var(--border); margin-top: 8px; overflow: hidden; }
+.grade-bar { height: 100%; border-radius: 99px; transition: width 0.8s cubic-bezier(.4,0,.2,1); }
+.grade-card-right { text-align: right; flex-shrink: 0; }
+.grade-card-letter { font-size: 24px; font-weight: 700; line-height: 1; }
+.grade-card-pct { font-size: 11px; color: var(--text2); margin-top: 2px; font-weight: 500; }
+.grade-a  { color: var(--green);  }
+.grade-b  { color: var(--accent); }
+.grade-c  { color: var(--amber);  }
+.grade-df { color: var(--red);    }
+.grade-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--grade-sep); }
+.grade-row:last-child { border-bottom: none; }
+.grade-name { font-size: 13px; color: var(--text1); }
+.grade-score { font-size: 14px; font-weight: 600; color: var(--text1); }
+.grade-score.good { color: var(--green); }
+.grade-score.warn { color: var(--amber); }
+.grade-score.bad  { color: var(--red);   }
+.grade-letter { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 6px; background: var(--grade-letter-bg); color: var(--text2); margin-left: 6px; }
+
+/* Final calc */
+.calc-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 4px; }
+.calc-label { font-size: 10px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.calc-input-wrap { position: relative; }
+.calc-input {
+  width: 100%; padding: 10px 22px 10px 8px;
+  border-radius: 10px; border: 1px solid var(--border);
+  font-size: 18px; font-weight: 700; color: var(--text1);
+  background: var(--input-bg); outline: none; text-align: center;
+  -moz-appearance: textfield; font-family: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.calc-input::-webkit-outer-spin-button, .calc-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.calc-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.calc-unit { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--text2); pointer-events: none; font-weight: 500; }
+.calc-result { border-radius: 12px; padding: 18px; text-align: center; margin-top: 12px; display: none; }
+.calc-result-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.calc-result-score { font-size: 46px; font-weight: 700; line-height: 1; margin-bottom: 6px; letter-spacing: -1px; }
+.calc-result-msg { font-size: 13px; line-height: 1.4; }
+
+/* Settings */
+.settings-input {
+  width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border);
+  font-size: 14px; color: var(--text1); background: var(--input-bg); margin-bottom: 14px;
+  outline: none; font-family: inherit; transition: border-color 0.15s, box-shadow 0.15s;
+}
+.settings-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.settings-btn {
+  width: 100%; padding: 13px; border-radius: 12px; background: var(--accent);
+  color: #fff; font-size: 14px; font-weight: 600; border: none; cursor: pointer; font-family: inherit;
+  box-shadow: 0 2px 10px var(--accent) / 0.28;
+}
+.settings-note { font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 14px; }
+.connected-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--connected-bg); border-radius: 10px;
+  padding: 7px 12px; font-size: 13px; color: var(--connected-color); font-weight: 600; margin-bottom: 12px;
+}
+.connected-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+.sync-btn {
+  width: 100%; padding: 13px; border-radius: 12px;
+  background: var(--sync-btn-bg); color: var(--sync-btn-color); font-size: 14px; font-weight: 600;
+  border: 1px solid var(--sync-btn-border); cursor: pointer; margin-bottom: 8px; font-family: inherit;
+}
+.sync-btn:disabled { background: var(--btn-secondary-bg); color: var(--text2); cursor: not-allowed; border-color: var(--border); }
+.disconnect-btn {
+  width: 100%; padding: 13px; border-radius: 12px;
+  background: var(--disconnect-bg); color: var(--disconnect-color); font-size: 14px; font-weight: 600;
+  border: 1px solid var(--disconnect-border); cursor: pointer; font-family: inherit;
+}
+.sync-status { border-radius: 10px; padding: 10px 13px; font-size: 13px; margin-top: 10px; display: none; }
+.sync-status.success { background: var(--success-bg); color: var(--success-color); display: block; }
+.sync-status.error   { background: var(--error-bg);   color: var(--error-color);   display: block; }
+.change-courses-btn {
+  width: 100%; padding: 13px; border-radius: 12px;
+  background: var(--btn-secondary-bg); color: var(--btn-secondary-color);
+  font-size: 14px; font-weight: 600; border: none; cursor: pointer; margin-bottom: 8px; font-family: inherit;
+}
+
+/* Empty / Loading */
+.loading-box { text-align: center; padding: 48px 0; color: var(--text2); font-size: 14px; }
+.loading-box::before {
+  content: ''; display: block;
+  width: 28px; height: 28px;
+  border: 2.5px solid var(--border); border-top-color: var(--accent);
+  border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 14px;
+}
+.course-loading::before {
+  content: ''; display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid var(--border); border-top-color: var(--accent);
+  border-radius: 50%; animation: spin 0.7s linear infinite;
+  vertical-align: middle; margin-right: 8px;
+}
+.empty-box {
+  background: var(--surface); border-radius: var(--card-radius);
+  border: 1px solid var(--border); padding: 36px 24px; text-align: center;
+}
+.empty-icon { font-size: 32px; margin-bottom: 12px; opacity: 0.4; }
+.empty-title { font-size: 15px; font-weight: 600; color: var(--text1); margin-bottom: 6px; }
+.empty-sub { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+/* Help */
+.help-toggle-btn {
+  width: 100%; background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 14px; font-weight: 500; color: var(--accent); padding: 0; text-align: left; font-family: inherit;
+}
+.help-toggle-arrow { font-size: 20px; transition: transform 0.2s; display: inline-block; color: var(--accent); }
+.help-toggle-arrow.open { transform: rotate(90deg); }
+.help-note { font-size: 13px; color: var(--text2); background: var(--surface2); border-radius: 10px; padding: 12px; margin-bottom: 14px; line-height: 1.5; }
+.help-steps { display: flex; flex-direction: column; gap: 14px; }
+.help-step { display: flex; align-items: flex-start; gap: 12px; }
+.help-step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.help-step-text { font-size: 13px; color: var(--text1); line-height: 1.55; padding-top: 3px; }
+.help-step-text strong { font-weight: 600; }
+
+/* Spinner + btn loading */
+@keyframes spin { to { transform: rotate(360deg); } }
+.btn-loading { position: relative; color: transparent !important; pointer-events: none; }
+.btn-loading::after {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  width: 18px; height: 18px; margin: -9px 0 0 -9px;
+  border: 2px solid rgba(255,255,255,0.35); border-top-color: #fff;
+  border-radius: 50%; animation: spin 0.7s linear infinite;
+}
+.btn-loading.sync-btn::after { border-top-color: var(--green); border-color: var(--border); }
+.btn-loading.onboard-btn::after { border-top-color: #fff; }
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav { display: none; }
+.nav-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  padding: 7px 2px 4px; background: none; border: none; cursor: pointer;
+  color: var(--text2); gap: 3px; transition: color 0.18s; font-family: inherit;
+  position: relative;
+}
+.nav-item.active { color: var(--accent); }
+.nav-icon { position: relative; width: 46px; height: 28px; display: flex; align-items: center; justify-content: center; }
+.nav-icon::before {
+  content: ''; position: absolute; inset: 0;
+  background: transparent; border-radius: 99px;
+  transition: background 0.18s;
+}
+.nav-item.active .nav-icon::before { background: var(--accent-soft); }
+.nav-icon svg { position: relative; z-index: 1; width: 20px; height: 20px; }
+.nav-label { font-size: 9.5px; font-weight: 600; letter-spacing: 0.02em; }
+
+/* ===== TWEAKS PANEL ===== */
+.tweaks-panel {
+  display: none;
+  position: fixed; bottom: 80px; right: 16px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 18px; box-shadow: var(--shadow-md);
+  padding: 18px 20px; width: 240px; z-index: 200;
+}
+.tweaks-panel.open { display: block; }
+.tweaks-title { font-size: 13px; font-weight: 700; color: var(--text1); margin-bottom: 16px; letter-spacing: -0.1px; }
+.tweak-row { margin-bottom: 14px; }
+.tweak-label { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+.tweak-swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+.swatch {
+  width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
+  border: 2px solid transparent; transition: transform 0.15s, border-color 0.15s;
+}
+.swatch:hover { transform: scale(1.1); }
+.swatch.active { border-color: var(--text1); }
+.tweak-slider { width: 100%; accent-color: var(--accent); }
+
+/* Welcome toast */
+#welcome-toast { font-family: 'DM Sans', sans-serif !important; }
+
+/* ===== MOBILE ===== */
+@media (max-width: 600px) {
+  body { padding: 0; align-items: stretch; }
+  .app { max-width: 100%; }
+  .auth-screen { margin: 16px; margin-top: 36px; }
+  .onboard-screen { margin: 16px; margin-top: 16px; }
+  .main-app { display: flex; flex-direction: column; height: 100dvh; }
+  .tabs { display: none; }
+  .content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+  .bottom-nav {
+    display: flex; position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--surface); border-top: 1px solid var(--border);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    z-index: 100; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  }
+  .tweaks-panel { bottom: calc(72px + env(safe-area-inset-bottom, 0px) + 8px); }
+}
+
+/* Animate page entry */
+.page.active { animation: fadeUp 0.2s ease both; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* â”€â”€ Welcome Screen â”€â”€ */
+#ws-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px; overflow-y: auto;
+}
+#ws-card {
+  background: var(--surface);
+  border-radius: 14px;
+  box-shadow: var(--shadow-md);
+  width: 100%; max-width: 380px;
+  padding: 28px 24px 24px;
+  position: relative;
+  animation: fadeUp 0.25s ease;
+}
+#ws-close {
+  position: absolute; top: 14px; right: 14px;
+  background: var(--surface2); border: none; cursor: pointer;
+  width: 30px; height: 30px; border-radius: 50%;
+  font-size: 16px; color: var(--text2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: inherit; line-height: 1;
+}
+#ws-close:hover { background: var(--border); color: var(--text1); }
+#ws-logo-row { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+#ws-logo-row .logo-mark { width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0; }
+#ws-logo-name { font-size: 15px; font-weight: 700; color: var(--text1); }
+#ws-logo-name em { font-style: italic; }
+#ws-heading { font-size: 22px; font-weight: 700; color: var(--accent); margin-bottom: 5px; line-height: 1.2; }
+#ws-date { font-size: 13px; color: var(--text2); margin-bottom: 6px; }
+#ws-subtitle { font-size: 14px; color: var(--text2); margin-bottom: 26px; line-height: 1.45; }
+#ws-sync-btn {
+  width: 100%; padding: 15px; background: var(--accent); color: #fff;
+  border: none; border-radius: 12px; font-size: 15px; font-weight: 600;
+  cursor: pointer; font-family: inherit; transition: opacity 0.15s;
+}
+#ws-sync-btn:hover { opacity: 0.88; }
+#ws-sync-btn:disabled { opacity: 0.6; cursor: default; }
+.ws-skip { background: none; border: none; color: var(--text2); font-size: 13px; cursor: pointer; font-family: inherit; display: block; margin: 14px auto 0; }
+.ws-skip:hover { color: var(--text1); }
+#ws-result-count { font-size: 20px; font-weight: 700; color: var(--text1); margin-bottom: 6px; }
+#ws-result-sub { font-size: 13px; color: var(--text2); margin-bottom: 22px; line-height: 1.45; }
+#ws-view-btn {
+  width: 100%; padding: 14px; background: var(--accent-soft); color: var(--accent-text);
+  border: 1px solid var(--accent-soft); border-radius: 12px; font-size: 14px; font-weight: 600;
+  cursor: pointer; font-family: inherit; transition: opacity 0.15s; margin-bottom: 0;
+}
+#ws-view-btn:hover { opacity: 0.8; }
+#ws-list-overlay {
+  position: fixed; inset: 0; z-index: 2100;
+  background: var(--bg); overflow-y: auto;
+  animation: fadeUp 0.2s ease;
+}
+#ws-list-inner {
+  max-width: 500px; margin: 0 auto; padding: 20px 20px 40px;
+}
+#ws-list-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px;
+}
+#ws-list-title { font-size: 18px; font-weight: 700; color: var(--text1); }
+#ws-list-close {
+  background: var(--surface2); border: none; cursor: pointer;
+  width: 30px; height: 30px; border-radius: 50%;
+  font-size: 16px; color: var(--text2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: inherit;
+}
+#ws-list-close:hover { background: var(--border); color: var(--text1); }
+.ws-a-card {
+  background: var(--surface); border-radius: var(--card-radius);
+  border: 1px solid var(--border); padding: 14px 16px; margin-bottom: 10px;
+}
+.ws-a-title { font-size: 14px; font-weight: 600; color: var(--text1); margin-bottom: 4px; }
+.ws-a-meta { font-size: 12px; color: var(--text2); }
+.card-title-link { color: inherit; text-decoration: none; }
+.card-title-link:hover { color: var(--accent); }
+.canvas-link {
+  display: inline-block; margin-top: 7px;
+  font-size: 11.5px; font-weight: 500; color: var(--text2);
+  text-decoration: none; letter-spacing: 0.01em;
+}
+.canvas-link:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- LOGIN -->
+  <div id="login-screen" class="auth-screen">
+    <div class="auth-logo logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 20 20" fill="none">
+          <path d="M5 7C5 5.34 6.34 4 8 4h3.5C13.43 4 15 5.57 15 7.5S13.43 11 11.5 11H8C6.34 11 5 12.34 5 14s1.34 3 3 3h5" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="logo-word">Study<em>Flow</em></span>
+    </div>
+    <div class="auth-sub">Your assignments, priorities, and grades â€” one place.</div>
+    <div id="login-msg"></div>
+    <div class="auth-label">Email</div>
+    <input class="auth-input" type="email" id="login-email" placeholder="you@email.com" />
+    <div class="auth-label">Password</div>
+    <input class="auth-input" type="password" id="login-password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" />
+    <button class="auth-btn" id="login-btn" onclick="handleLogin()">Sign in</button>
+    <div class="auth-switch">Don't have an account? <a onclick="showSignup()">Sign up</a></div>
+  </div>
+
+  <!-- SIGNUP -->
+  <div id="signup-screen" class="auth-screen" style="display:none;">
+    <div class="auth-logo logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 20 20" fill="none">
+          <path d="M5 7C5 5.34 6.34 4 8 4h3.5C13.43 4 15 5.57 15 7.5S13.43 11 11.5 11H8C6.34 11 5 12.34 5 14s1.34 3 3 3h5" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="logo-word">Study<em>Flow</em></span>
+    </div>
+    <div class="auth-sub">Create your free account to get started.</div>
+    <div id="signup-msg"></div>
+    <div class="auth-label">Email</div>
+    <input class="auth-input" type="email" id="signup-email" placeholder="you@email.com" />
+    <div class="auth-label">Password</div>
+    <input class="auth-input" type="password" id="signup-password" placeholder="At least 6 characters" />
+    <button class="auth-btn" id="signup-btn" onclick="handleSignup()">Create account</button>
+    <div class="auth-switch">Already have an account? <a onclick="showLogin()">Sign in</a></div>
+  </div>
+
+  <!-- ONBOARDING 1: CONNECT CANVAS -->
+  <div id="onboard-canvas" class="onboard-screen">
+    <div class="progress-dots">
+      <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+    <div class="onboard-step">Step 1 of 3</div>
+    <div class="onboard-title">Connect Canvas</div>
+    <div class="onboard-sub">Enter your school's Canvas URL and API token so StudyFlow can see your assignments.</div>
+    <div id="onboard-canvas-msg"></div>
+    <div class="auth-label">Canvas URL</div>
+    <input class="auth-input" type="text" id="ob-canvas-url" placeholder="yourschool.instructure.com" />
+    <div class="auth-label">Canvas API Token</div>
+    <input class="auth-input" type="password" id="ob-canvas-token" placeholder="Paste your token here" />
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title" style="margin-bottom:6px;font-size:13px;">How to get your token</div>
+      <div class="settings-note" style="margin-bottom:0;">1. Log into Canvas<br>2. Click your profile picture<br>3. Go to Settings<br>4. Scroll to "Approved Integrations"<br>5. Click "+ New Access Token"<br>6. Name it "StudyFlow" and paste it above</div>
+    </div>
+    <button class="onboard-btn" id="ob-canvas-btn" onclick="saveCanvasOnboard()">Save & continue</button>
+  </div>
+
+  <!-- ONBOARDING 2: SELECT COURSES -->
+  <div id="onboard-courses" class="onboard-screen">
+    <div class="progress-dots">
+      <div class="dot active"></div><div class="dot active"></div><div class="dot"></div>
+    </div>
+    <div class="onboard-step">Step 2 of 3</div>
+    <div class="onboard-title">Your current classes</div>
+    <div class="onboard-sub">Select only the classes you're taking right now. StudyFlow will only pull assignments from these.</div>
+    <div id="course-list-loading" class="course-loading">Loading your courses from Canvas...</div>
+    <div id="course-list"></div>
+    <div id="onboard-courses-msg"></div>
+    <button class="onboard-btn" id="ob-courses-btn" onclick="saveSelectedCourses()">Continue</button>
+    <button class="onboard-btn-secondary" onclick="showOnboardCanvas()">Go back</button>
+  </div>
+
+  <!-- ONBOARDING 2: SET GOALS -->
+  <div id="onboard-goals" class="onboard-screen">
+    <div class="progress-dots">
+      <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div>
+    </div>
+    <div class="onboard-step">Step 3 of 3</div>
+    <div class="onboard-title">Set your goals</div>
+    <div class="onboard-sub">What do you want to achieve this semester? These help StudyFlow prioritize your work.</div>
+    <div id="goals-list-onboard"></div>
+    <div class="goal-input-row">
+      <input class="goal-input" type="text" id="ob-goal-input" placeholder="e.g. Raise Biology above 70%" />
+      <button class="goal-add-btn" onclick="addGoalOnboard()">Add</button>
+    </div>
+    <div id="onboard-goals-msg"></div>
+    <button class="onboard-btn" id="ob-goals-btn" onclick="finishOnboarding()">Get started</button>
+    <button class="onboard-btn-secondary" onclick="finishOnboarding()">Skip for now</button>
+    <button class="onboard-btn-secondary" onclick="showOnboardCourses()">Go back</button>
+  </div>
+
+  <!-- â•â• WELCOME SCREEN â€” shows once per 24 h â•â• -->
+  <div id="ws-overlay" style="display:none;">
+    <div id="ws-card">
+      <button id="ws-close" onclick="wsClose()" title="Dismiss">âœ•</button>
+
+      <div id="ws-logo-row">
+        <div class="logo-mark" style="width:32px;height:32px;border-radius:8px;">
+          <svg viewBox="0 0 20 20" fill="none">
+            <path d="M5 7C5 5.34 6.34 4 8 4h3.5C13.43 4 15 5.57 15 7.5S13.43 11 11.5 11H8C6.34 11 5 12.34 5 14s1.34 3 3 3h5" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div id="ws-logo-name">Study<em>Flow</em></div>
+      </div>
+
+      <!-- State 1: initial prompt -->
+      <div id="ws-welcome">
+        <div id="ws-heading">Welcome back</div>
+        <div id="ws-date"></div>
+        <div id="ws-subtitle">Here's what's on your plate today</div>
+        <button id="ws-sync-btn" onclick="wsSync()">Sync assignments</button>
+        <button class="ws-skip" onclick="wsClose()">Go to app â†’</button>
+      </div>
+
+      <!-- State 2: after sync result -->
+      <div id="ws-result" style="display:none;">
+        <div id="ws-result-count"></div>
+        <div id="ws-result-sub"></div>
+        <button id="ws-view-btn" onclick="wsViewNew()" style="display:none;">View new assignments</button>
+        <button class="ws-skip" onclick="wsClose()">Go to app â†’</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- New assignments list overlay -->
+  <div id="ws-list-overlay" style="display:none;">
+    <div id="ws-list-inner">
+      <div id="ws-list-header">
+        <div id="ws-list-title">New assignments</div>
+        <button id="ws-list-close" onclick="wsCloseList()" title="Close">âœ•</button>
+      </div>
+      <div id="ws-list-items"></div>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="welcome-toast" onclick="dismissWelcome()" style="display:none;position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:13px 18px;box-shadow:0 4px 20px rgba(0,0,0,0.12);max-width:340px;width:calc(100% - 32px);cursor:pointer;transition:opacity 0.4s;">
+    <div style="font-size:14px;font-weight:600;color:var(--text1);margin-bottom:2px;" id="welcome-toast-title"></div>
+    <div style="font-size:12px;color:var(--text2);">Tap to dismiss</div>
+  </div>
+
+  <div id="main-app" class="main-app">
+    <div class="topbar">
+      <div class="topbar-logo logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 20 20" fill="none">
+            <path d="M5 7C5 5.34 6.34 4 8 4h3.5C13.43 4 15 5.57 15 7.5S13.43 11 11.5 11H8C6.34 11 5 12.34 5 14s1.34 3 3 3h5" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="logo-word">Study<em>Flow</em></div>
+          <div class="topbar-sub" id="topbar-date"></div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme">ðŸŒ™</button>
+        <button class="signout-btn" onclick="signOut()">Sign out</button>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="showPage('due',this)">Due Soon</button>
+      <button class="tab" onclick="showPage('allwork',this)">All Work</button>
+      <button class="tab" onclick="showPage('priority',this)">Priority</button>
+      <button class="tab" onclick="showPage('grades',this)">Grades</button>
+      <button class="tab" onclick="showPage('goals',this)">Goals</button>
+      <button class="tab" onclick="showPage('settings',this)">Settings</button>
+    </div>
+    <div class="content">
+
+      <!-- DUE SOON -->
+      <div class="page active" id="page-due">
+        <div id="due-loading" class="loading-box">Loading assignments...</div>
+        <div id="due-empty" class="empty-box" style="display:none;">
+          <div class="empty-icon">ðŸ“‹</div>
+          <div class="empty-title">You're all caught up</div>
+          <div class="empty-sub">No upcoming assignments. Hit sync in Settings or check back later.</div>
+        </div>
+        <div id="due-list" style="display:none;">
+          <div class="stats-row">
+            <div class="stat-card"><div class="stat-label">Due this week</div><div class="stat-val" id="stat-week">0</div></div>
+            <div class="stat-card"><div class="stat-label">Overdue</div><div class="stat-val" id="stat-overdue" style="color:#d85a30;">0</div></div>
+          </div>
+          <div id="overdue-section" style="display:none;"><div class="section-label">Overdue</div><div id="overdue-list"></div></div>
+          <div id="soon-section" style="display:none;"><div class="section-label">Due soon</div><div id="soon-list"></div></div>
+          <div id="later-section" style="display:none;"><div class="section-label">Later this week</div><div id="later-list"></div></div>
+        </div>
+      </div>
+
+      <!-- ALL WORK -->
+      <div class="page" id="page-allwork">
+        <div id="allwork-loading" class="loading-box">Loading all work...</div>
+        <div id="allwork-empty" class="empty-box" style="display:none;">
+          <div class="empty-icon">ðŸ“š</div>
+          <div class="empty-title">No assignments found</div>
+          <div class="empty-sub">Sync your Canvas account in Settings.</div>
+        </div>
+        <div id="allwork-list" style="display:none;"></div>
+      </div>
+
+      <!-- PRIORITY -->
+      <div class="page" id="page-priority">
+        <div class="ai-box">
+          <div class="ai-label"><span class="ai-dot"></span>Smart suggestion</div>
+          <div class="ai-text" id="priority-ai-text">Sync your assignments to get personalized priority suggestions.</div>
+        </div>
+        <div id="priority-empty" class="empty-box" style="display:none;">
+          <div class="empty-icon">âš¡</div>
+          <div class="empty-title">Nothing to prioritize</div>
+          <div class="empty-sub">Sync your Canvas account in Settings first.</div>
+        </div>
+        <div id="priority-list"></div>
+      </div>
+
+      <!-- GRADES -->
+      <div class="page" id="page-grades">
+        <div id="grades-loading" class="loading-box">Loading grades...</div>
+        <div id="grades-empty" class="empty-box" style="display:none;">
+          <div class="empty-icon">ðŸ“Š</div>
+          <div class="empty-title">No grades published yet</div>
+          <div class="empty-sub">Grades will appear once your teachers post them. Try syncing in Settings.</div>
+        </div>
+        <div id="grades-list" style="display:none;">
+          <div class="section-label">Current grades</div>
+          <div id="grades-cards"></div>
+        </div>
+      </div>
+
+      <!-- GOALS -->
+      <div class="page" id="page-goals">
+        <div class="section-label">Your goals</div>
+        <div id="goals-display">
+          <div style="color:#8e8e93;font-size:13px;padding:14px 0;">No goals set yet. Add one below!</div>
+        </div>
+        <div class="add-goal-row">
+          <input class="add-goal-input" type="text" id="main-goal-input" placeholder="Add a goal..." />
+          <button class="add-goal-btn" onclick="addGoalMain()">Add</button>
+        </div>
+        <div class="section-label" style="margin-top:20px;">Final exam calculator</div>
+        <div class="card">
+          <div style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.5;">What score do you need on your final to hit your target grade?</div>
+          <div class="calc-row">
+            <div>
+              <div class="calc-label">Current grade</div>
+              <div class="calc-input-wrap">
+                <input class="calc-input" type="number" id="calc-current" min="0" max="100" placeholder="85" oninput="calculateFinal()" />
+                <span class="calc-unit">%</span>
+              </div>
+            </div>
+            <div>
+              <div class="calc-label">Final weight</div>
+              <div class="calc-input-wrap">
+                <input class="calc-input" type="number" id="calc-weight" min="1" max="100" placeholder="30" oninput="calculateFinal()" />
+                <span class="calc-unit">%</span>
+              </div>
+            </div>
+            <div>
+              <div class="calc-label">Target grade</div>
+              <div class="calc-input-wrap">
+                <input class="calc-input" type="number" id="calc-target" min="0" max="100" placeholder="90" oninput="calculateFinal()" />
+                <span class="calc-unit">%</span>
+              </div>
+            </div>
+          </div>
+          <div class="calc-result" id="calc-result">
+            <div class="calc-result-label" id="calc-result-label"></div>
+            <div class="calc-result-score" id="calc-result-score"></div>
+            <div class="calc-result-msg" id="calc-result-msg"></div>
+          </div>
+        </div>
+
+        <div class="section-label" style="margin-top:20px;">Your selected classes</div>
+        <div class="card" id="selected-courses-display">
+          <div style="color:#8e8e93;font-size:13px;">No classes selected yet.</div>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="page" id="page-settings">
+        <div class="section-label">Canvas connection</div>
+        <div id="canvas-connected" style="display:none;">
+          <div class="card">
+            <div class="connected-badge"><span class="connected-dot"></span>Canvas connected</div>
+            <div class="card-sub" id="canvas-url-display" style="margin-bottom:12px;"></div>
+            <button class="sync-btn" id="sync-btn" onclick="syncCanvas()">Sync assignments now</button>
+            <div id="sync-status" class="sync-status"></div>
+            <button class="change-courses-btn" style="margin-top:8px;" onclick="showCourseSelection()">Did we miss a class?</button>
+            <button class="disconnect-btn" style="margin-top:8px;" onclick="disconnectCanvas()">Disconnect Canvas</button>
+          </div>
+        </div>
+        <div id="canvas-form" style="display:none;">
+          <div class="card">
+            <div class="auth-label">Canvas URL</div>
+            <input class="settings-input" type="text" id="canvas-url" placeholder="yourschool.instructure.com" />
+            <div class="auth-label">Canvas API Token</div>
+            <input class="settings-input" type="password" id="canvas-token" placeholder="Paste your token here" />
+            <div id="canvas-msg"></div>
+            <button class="settings-btn" onclick="saveCanvasSettings()">Save & connect</button>
+          </div>
+          <div class="card" style="margin-top:8px;">
+            <button class="help-toggle-btn" onclick="toggleSettingsCanvasHelp()">
+              <span>How do I find my Canvas token?</span>
+              <span class="help-toggle-arrow" id="settings-canvas-help-arrow">â€º</span>
+            </button>
+            <div id="settings-canvas-help-content" style="display:none; margin-top:16px;">
+              <div class="help-note">Make sure you're already logged into your school's Canvas in a browser tab before you start.</div>
+              <div class="help-steps">
+                <div class="help-step">
+                  <div class="help-step-num">1</div>
+                  <div class="help-step-text">In Canvas, click your <strong>profile picture</strong> or name in the top-left corner of the screen.</div>
+                </div>
+                <div class="help-step">
+                  <div class="help-step-num">2</div>
+                  <div class="help-step-text">Choose <strong>Settings</strong> from the menu that appears.</div>
+                </div>
+                <div class="help-step">
+                  <div class="help-step-num">3</div>
+                  <div class="help-step-text">Scroll all the way down to the <strong>Approved Integrations</strong> section near the bottom of the page.</div>
+                </div>
+                <div class="help-step">
+                  <div class="help-step-num">4</div>
+                  <div class="help-step-text">Click <strong>+ New Access Token</strong>. For the purpose, type anything â€” "StudyFlow" works great.</div>
+                </div>
+                <div class="help-step">
+                  <div class="help-step-num">5</div>
+                  <div class="help-step-text">Click <strong>Generate Token</strong>, copy the long token shown, and paste it into the field above. Canvas only shows it once!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="section-label" style="margin-top:20px;">Help</div>
+        <div class="card">
+          <button class="help-toggle-btn" onclick="toggleCanvasHelp()">
+            <span>How to get your Canvas token</span>
+            <span class="help-toggle-arrow" id="canvas-help-arrow">â€º</span>
+          </button>
+          <div id="canvas-help-content" style="display:none; margin-top:16px;">
+            <div class="help-note">Make sure you're already logged into your school's Canvas in a browser tab before you start.</div>
+            <div class="help-steps">
+              <div class="help-step">
+                <div class="help-step-num">1</div>
+                <div class="help-step-text">In Canvas, click your <strong>profile picture</strong> or name in the top-left corner of the screen.</div>
+              </div>
+              <div class="help-step">
+                <div class="help-step-num">2</div>
+                <div class="help-step-text">Choose <strong>Settings</strong> from the menu that appears.</div>
+              </div>
+              <div class="help-step">
+                <div class="help-step-num">3</div>
+                <div class="help-step-text">Scroll all the way down to the <strong>Approved Integrations</strong> section near the bottom of the page.</div>
+              </div>
+              <div class="help-step">
+                <div class="help-step-num">4</div>
+                <div class="help-step-text">Click <strong>+ New Access Token</strong>. For the purpose, type anything you like â€” "StudyFlow" works great.</div>
+              </div>
+              <div class="help-step">
+                <div class="help-step-num">5</div>
+                <div class="help-step-text">Click <strong>Generate Token</strong>, then copy the long token shown and paste it into the Canvas API Token field above. Canvas only shows it once, so copy it right away!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="section-label" style="margin-top:20px;">Account</div>
+        <div class="card">
+          <div class="card-sub" id="account-email" style="margin-bottom:12px;"></div>
+          <button class="disconnect-btn" onclick="signOut()">Sign out</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM NAV (mobile only) -->
+    <nav class="bottom-nav" id="bottom-nav">
+      <button class="nav-item active" id="nav-due" onclick="showPage('due',this,true)">
+        <div class="nav-icon">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="10" cy="10" r="7.5"/><polyline points="10 5.5 10 10 12.5 12.5"/>
+          </svg>
+        </div>
+        <span class="nav-label">Due</span>
+      </button>
+      <button class="nav-item" id="nav-allwork" onclick="showPage('allwork',this,true)">
+        <div class="nav-icon">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <line x1="4" y1="6" x2="16" y2="6"/><line x1="4" y1="10" x2="16" y2="10"/><line x1="4" y1="14" x2="11" y2="14"/>
+          </svg>
+        </div>
+        <span class="nav-label">All Work</span>
+      </button>
+      <button class="nav-item" id="nav-priority" onclick="showPage('priority',this,true)">
+        <div class="nav-icon">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="10 2.5 12 7.5 17.5 7.5 13 11 14.5 17 10 13.5 5.5 17 7 11 2.5 7.5 8 7.5"/>
+          </svg>
+        </div>
+        <span class="nav-label">Priority</span>
+      </button>
+      <button class="nav-item" id="nav-grades" onclick="showPage('grades',this,true)">
+        <div class="nav-icon">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <rect x="3" y="11" width="3" height="6" rx="1"/>
+            <rect x="8.5" y="7" width="3" height="10" rx="1"/>
+            <rect x="14" y="3" width="3" height="14" rx="1"/>
+          </svg>
+        </div>
+        <span class="nav-label">Grades</span>
+      </button>
+      <button class="nav-item" id="nav-goals" onclick="showPage('goals',this,true)">
+        <div class="nav-icon">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <circle cx="10" cy="10" r="7.5"/><circle cx="10" cy="10" r="3.5"/>
+            <line x1="10" y1="2.5" x2="10" y2="4.5"/><line x1="10" y1="15.5" x2="10" y2="17.5"/>
+          </svg>
+        </div>
+        <span class="nav-label">Goals</span>
+      </button>
+      <button class="nav-item" id="nav-settings" onclick="showPage('settings',this,true)">
+        <div class="nav-icon">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="10" cy="10" r="2.5"/>
+            <path d="M10 2v1.5m0 13V18m8-8h-1.5M3.5 10H2m11.66-5.66-1.06 1.06M7.4 12.6l-1.06 1.06M17.66 15.66l-1.06-1.06M3.4 7.4 2.34 6.34M13.66 13.66l1.06 1.06M5.46 5.46 4.4 4.4"/>
+          </svg>
+        </div>
+        <span class="nav-label">Settings</span>
+      </button>
+    </nav>
+  </div><!-- /main-app -->
+
+<!-- TWEAKS PANEL -->
+<div class="tweaks-panel" id="tweaks-panel">
+  <div class="tweaks-title">Tweaks</div>
+  <div class="tweak-row">
+    <div class="tweak-label">Accent color</div>
+    <div class="tweak-swatches" id="tweak-swatches">
+      <div class="swatch active" data-h="275" style="background:oklch(0.56 0.2 275);" onclick="setAccent(275,this)" title="Violet"></div>
+      <div class="swatch" data-h="220" style="background:oklch(0.56 0.2 220);" onclick="setAccent(220,this)" title="Blue"></div>
+      <div class="swatch" data-h="170" style="background:oklch(0.52 0.18 170);" onclick="setAccent(170,this)" title="Teal"></div>
+      <div class="swatch" data-h="145" style="background:oklch(0.52 0.16 145);" onclick="setAccent(145,this)" title="Green"></div>
+      <div class="swatch" data-h="30"  style="background:oklch(0.58 0.2 30);"  onclick="setAccent(30,this)"  title="Orange"></div>
+      <div class="swatch" data-h="330" style="background:oklch(0.55 0.2 330);" onclick="setAccent(330,this)" title="Pink"></div>
+    </div>
+  </div>
+  <div class="tweak-row">
+    <div class="tweak-label">Card corners</div>
+    <div class="tweak-swatches">
+      <div class="swatch" style="background:var(--surface);border:1.5px solid var(--border);border-radius:4px;width:32px;height:32px;" onclick="setRadius(8,this)" title="Sharp"></div>
+      <div class="swatch active" style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;width:32px;height:32px;" onclick="setRadius(14,this)" title="Rounded"></div>
+      <div class="swatch" style="background:var(--surface);border:1.5px solid var(--border);border-radius:18px;width:32px;height:32px;" onclick="setRadius(20,this)" title="Pill"></div>
+    </div>
+  </div>
+  <div class="tweak-row" style="margin-bottom:0;">
+    <div class="tweak-label">Text size</div>
+    <input type="range" class="tweak-slider" min="0.85" max="1.15" step="0.05" value="1" id="tweak-font-size" oninput="setFontScale(this.value)">
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<script>
+/* ===========================
+   TWEAKS
+=========================== */
+const tweakDefaults = JSON.parse(document.getElementById('tweak-defaults').textContent);
+function setAccent(h, el) {
+  document.documentElement.style.setProperty('--accent-h', h);
+  document.querySelectorAll('#tweak-swatches .swatch').forEach(s => s.classList.remove('active'));
+  if (el) el.classList.add('active');
+  saveTweak('accent', String(h));
+}
+function setRadius(r, el) {
+  document.documentElement.style.setProperty('--card-radius', r + 'px');
+  document.querySelectorAll('.tweaks-panel .tweak-row:nth-child(3) .swatch').forEach(s => s.classList.remove('active'));
+  if (el) el.classList.add('active');
+  saveTweak('cardRadius', String(r));
+}
+function setFontScale(v) {
+  document.documentElement.style.setProperty('--font-scale', v);
+  saveTweak('fontScale', String(v));
+}
+function saveTweak(key, val) {
+  localStorage.setItem('sf_tweak_' + key, val);
+}
+function applyTweaks(t) {
+  if (t.accent)     { document.documentElement.style.setProperty('--accent-h', t.accent); document.querySelector(`.swatch[data-h="${t.accent}"]`)?.classList.add('active'); }
+  if (t.cardRadius) { document.documentElement.style.setProperty('--card-radius', t.cardRadius + 'px'); }
+  if (t.fontScale)  { document.documentElement.style.setProperty('--font-scale', t.fontScale); const el = document.getElementById('tweak-font-size'); if (el) el.value = t.fontScale; }
+}
+(function() {
+  const saved = {
+    accent: localStorage.getItem('sf_tweak_accent') || tweakDefaults.accent,
+    cardRadius: localStorage.getItem('sf_tweak_cardRadius') || tweakDefaults.cardRadius,
+    fontScale: localStorage.getItem('sf_tweak_fontScale') || tweakDefaults.fontScale,
+  };
+  applyTweaks(saved);
+})();
+
+/* ===========================
+   MAIN APP
+=========================== */
+const SB_URL = 'https://ukitwdlqmoecktclnzgd.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVraXR3ZGxxbW9lY2t0Y2xuemdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMjA5MDMsImV4cCI6MjA5MzY5NjkwM30.QYRh0BnzUNQ8fugP5mitnhgbVbfmiAsoerZB6EtTtag'; // STAGING
+
+let ACCESS_TOKEN = localStorage.getItem('sf_access_token') || '';
+let REFRESH_TOKEN = localStorage.getItem('sf_refresh_token') || '';
+let USER_ID = localStorage.getItem('sf_user_id') || '';
+let USER_EMAIL = localStorage.getItem('sf_user_email') || '';
+let USER_NAME = localStorage.getItem('sf_user_name') || '';
+let userGoals = JSON.parse(localStorage.getItem('sf_goals') || '[]');
+let selectedCoursesTemp = [];
+let onboardGoals = [];
+
+function getSchoolYear() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const fallYear = month >= 8 ? year : year - 1;
+  const springYear = fallYear + 1;
+  const fy2 = String(fallYear).slice(-2);
+  const sy2 = String(springYear).slice(-2);
+  return {
+    fallYear, springYear, fy2, sy2,
+    currentFall: 'FAL' + fy2,
+    currentSpring: 'SPR' + sy2,
+    schoolYearShort: fy2 + '/' + sy2,
+  };
+}
+
+function isCurrentYearCourse(name, sy) {
+  if (!name) return false;
+  const n = name.toUpperCase();
+  // Match FAL/SPR/SUM/WIN abbreviations, full 4-digit years, or 2-digit year codes
+  return (
+    n.includes('FAL' + sy.fy2) || n.includes('SPR' + sy.sy2) ||
+    n.includes('SUM' + sy.sy2) || n.includes('WIN' + sy.sy2) ||
+    n.includes(String(sy.fallYear)) || n.includes(String(sy.springYear)) ||
+    n.includes(sy.fy2 + '/' + sy.sy2) || n.includes(sy.fy2 + '-' + sy.sy2)
+  );
+}
+
+// Returns true only when a course name contains a term tag whose end date is in the past.
+// Courses without any FAL/SPR/SUM/WIN tag (e.g. "Speech and Debate") return false â€”
+// they are treated as active because we cannot determine their term from the name alone.
+function isCourseTermConcluded(name) {
+  const m = (name || '').toUpperCase().match(/\b(FAL|SPR|SUM|WIN)(\d{2})\b/);
+  if (!m) return false;
+  const endMonth = { FAL: 11, SPR: 4, SUM: 7, WIN: 1 };
+  const termEnd = new Date(2000 + parseInt(m[2], 10), endMonth[m[1]] ?? 11, 28);
+  return termEnd < new Date();
+}
+let doneSet = new Set();
+let cachedAssignments = [];
+let cachedGrades = [];
+
+const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+updateLastSyncedLabel();
+
+async function sbFetch(path, method='GET', body=null, useAuth=true) {
+  const headers = { 'Content-Type': 'application/json', 'apikey': SB_KEY };
+  if (useAuth && ACCESS_TOKEN) headers['Authorization'] = `Bearer ${ACCESS_TOKEN}`;
+  const opts = { method, headers };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(`${SB_URL}${path}`, opts);
+  const text = await res.text();
+  let data = null;
+  try { data = JSON.parse(text); } catch(e) { data = text; }
+  return { ok: res.ok, status: res.status, data };
+}
+
+async function refreshSession() {
+  if (!REFRESH_TOKEN) return false;
+  try {
+    const res = await fetch(`${SB_URL}/auth/v1/token?grant_type=refresh_token`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'apikey': SB_KEY },
+      body: JSON.stringify({ refresh_token: REFRESH_TOKEN })
+    });
+    if (!res.ok) return false;
+    const data = await res.json();
+    if (data.access_token) { saveSession(data); return true; }
+  } catch(e) {}
+  return false;
+}
+
+async function sbFetchWithRetry(path, method='GET', body=null, useAuth=true) {
+  let result = await sbFetch(path, method, body, useAuth);
+  if (result.status === 401 && REFRESH_TOKEN) {
+    const refreshed = await refreshSession();
+    if (refreshed) result = await sbFetch(path, method, body, useAuth);
+    else { clearSession(); showLoginScreen(); }
+  }
+  return result;
+}
+
+function saveSession(s) {
+  ACCESS_TOKEN = s.access_token; REFRESH_TOKEN = s.refresh_token;
+  USER_ID = s.user.id; USER_EMAIL = s.user.email;
+  // Extract display name from auth metadata, fall back to email prefix
+  const meta = s.user?.user_metadata || {};
+  USER_NAME = meta.full_name || meta.name || meta.display_name
+    || USER_EMAIL.split('@')[0].replace(/[^a-zA-Z]/g, ' ').trim().split(' ')[0] || '';
+  if (USER_NAME) USER_NAME = USER_NAME.charAt(0).toUpperCase() + USER_NAME.slice(1);
+  localStorage.setItem('sf_access_token', ACCESS_TOKEN);
+  localStorage.setItem('sf_refresh_token', REFRESH_TOKEN);
+  localStorage.setItem('sf_user_id', USER_ID);
+  localStorage.setItem('sf_user_email', USER_EMAIL);
+  localStorage.setItem('sf_user_name', USER_NAME);
+}
+
+function clearSession() {
+  ACCESS_TOKEN = REFRESH_TOKEN = USER_ID = USER_EMAIL = '';
+  ['sf_access_token','sf_refresh_token','sf_user_id','sf_user_email','sf_user_name','sf_goals'].forEach(k => localStorage.removeItem(k));
+}
+
+function hideAll() {
+  ['login-screen','signup-screen','onboard-canvas','onboard-courses','onboard-goals','main-app'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+}
+
+function showLoginScreen() { hideAll(); document.getElementById('login-screen').style.display = 'block'; }
+function showSignup() { hideAll(); document.getElementById('signup-screen').style.display = 'block'; }
+function showLogin() { hideAll(); document.getElementById('login-screen').style.display = 'block'; }
+function showOnboardCanvas() { hideAll(); document.getElementById('onboard-canvas').style.display = 'block'; }
+function showOnboardCourses() {
+  hideAll();
+  document.getElementById('onboard-courses').style.display = 'block';
+  if (!courseSelectionFromSettings) document.getElementById('ob-courses-btn').textContent = 'Continue';
+}
+function showOnboardGoals() { hideAll(); document.getElementById('onboard-goals').style.display = 'block'; renderGoalsOnboard(); }
+
+async function routeUser() {
+  if (!ACCESS_TOKEN || !USER_ID) { showLoginScreen(); return; }
+  const { ok, data } = await sbFetchWithRetry(`/rest/v1/user_settings?user_id=eq.${USER_ID}&select=canvas_url,canvas_token`);
+  if (!ok || !data || data.length === 0 || !data[0].canvas_token) { showOnboardCanvas(); return; }
+  showApp();
+}
+
+function maybeShowWelcome() {
+  const key = 'sf_last_welcome_' + USER_ID;
+  const last = parseInt(localStorage.getItem(key) || '0', 10);
+  const now = Date.now();
+  if (now - last < 24 * 60 * 60 * 1000) return; // shown within last 24h
+  localStorage.setItem(key, String(now));
+  const messages = [
+    'You\'re doing great staying on top of things!',
+    'Keep up the great work â€” you\'ve got this!',
+    'Stay focused, you\'re making real progress.',
+    'One assignment at a time â€” you\'ve got this!',
+  ];
+  const msg = messages[Math.floor(now / (24*60*60*1000)) % messages.length];
+  const name = USER_NAME ? `, ${USER_NAME}` : '';
+  document.getElementById('welcome-toast-title').textContent = `Welcome back${name}! ${msg}`;
+  const toast = document.getElementById('welcome-toast');
+  toast.style.display = 'block';
+  toast.style.opacity = '1';
+  // Auto-dismiss after 6s
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => { toast.style.display = 'none'; }, 400);
+  }, 6000);
+}
+
+function dismissWelcome() {
+  const toast = document.getElementById('welcome-toast');
+  toast.style.opacity = '0';
+  setTimeout(() => { toast.style.display = 'none'; }, 400);
+}
+
+function showApp() {
+  hideAll();
+  document.getElementById('main-app').style.display = 'block';
+  document.getElementById('account-email').textContent = USER_EMAIL;
+  doneSet = new Set(JSON.parse(localStorage.getItem('sf_done_' + USER_ID) || '[]'));
+  loadCanvasSettings();
+  loadAssignments();
+  loadGrades();
+  renderGoalsTab();
+  renderSelectedCoursesTab();
+  updateLastSyncedLabel();
+  autoSync();
+  maybeShowWelcome();
+}
+
+function signOut() { clearSession(); showLoginScreen(); }
+
+async function handleLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const msgEl = document.getElementById('login-msg');
+  msgEl.innerHTML = '';
+  if (!email || !password) { msgEl.innerHTML = '<div class="msg-error">Please fill in all fields.</div>'; return; }
+  const btn = document.getElementById('login-btn');
+  btn.disabled = true; btn.classList.add('btn-loading');
+  const { ok, data } = await sbFetch('/auth/v1/token?grant_type=password', 'POST', { email, password }, false);
+  btn.disabled = false; btn.classList.remove('btn-loading');
+  if (!ok) { msgEl.innerHTML = `<div class="msg-error">${data.error_description || 'Login failed.'}</div>`; return; }
+  saveSession(data); routeUser();
+}
+
+async function handleSignup() {
+  const email = document.getElementById('signup-email').value.trim();
+  const password = document.getElementById('signup-password').value;
+  const msgEl = document.getElementById('signup-msg');
+  msgEl.innerHTML = '';
+  if (!email || !password) { msgEl.innerHTML = '<div class="msg-error">Please fill in all fields.</div>'; return; }
+  if (password.length < 6) { msgEl.innerHTML = '<div class="msg-error">Password must be at least 6 characters.</div>'; return; }
+  const btn = document.getElementById('signup-btn');
+  btn.disabled = true; btn.classList.add('btn-loading');
+  const { ok, data } = await sbFetch('/auth/v1/signup', 'POST', { email, password }, false);
+  btn.disabled = false; btn.classList.remove('btn-loading');
+  if (!ok) { msgEl.innerHTML = `<div class="msg-error">${data.error_description || 'Signup failed.'}</div>`; return; }
+  msgEl.innerHTML = '<div class="msg-success">Account created! Check your email to confirm, then sign in.</div>';
+}
+
+async function saveCanvasOnboard() {
+  const url = document.getElementById('ob-canvas-url').value.trim().replace(/^https?:\/\//,'').replace(/\/$/,'');
+  const token = document.getElementById('ob-canvas-token').value.trim();
+  const msgEl = document.getElementById('onboard-canvas-msg');
+  msgEl.innerHTML = '';
+  if (!url) { msgEl.innerHTML = '<div class="msg-error">Please enter your Canvas URL (e.g. yourschool.instructure.com).</div>'; return; }
+  if (!token) { msgEl.innerHTML = '<div class="msg-error">Please paste your Canvas API token.</div>'; return; }
+  const btn = document.getElementById('ob-canvas-btn');
+  btn.disabled = true; btn.classList.add('btn-loading');
+
+  // Validate credentials via edge function (avoids browser CORS restrictions)
+  let validCourses;
+  try {
+    const validateResp = await fetch(`${SB_URL}/functions/v1/validate-canvas`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SB_KEY, 'Authorization': `Bearer ${ACCESS_TOKEN || SB_KEY}` },
+      body: JSON.stringify({ canvas_url: url, canvas_token: token })
+    });
+    const result = await validateResp.json();
+    if (result.error === 'invalid_token') {
+      btn.disabled = false; btn.classList.remove('btn-loading');
+      msgEl.innerHTML = '<div class="msg-error">That API token wasn\'t accepted by Canvas. Please go back to Canvas Settings, generate a new token, and paste the full value here.</div>'; return;
+    }
+    if (result.error === 'forbidden') {
+      btn.disabled = false; btn.classList.remove('btn-loading');
+      msgEl.innerHTML = '<div class="msg-error">Canvas denied access. Make sure your token has permission to read courses.</div>'; return;
+    }
+    if (result.error === 'canvas_error') {
+      btn.disabled = false; btn.classList.remove('btn-loading');
+      msgEl.innerHTML = `<div class="msg-error">Canvas returned an unexpected error (code ${result.status}). Double-check your URL and token, then try again.</div>`; return;
+    }
+    if (result.error === 'unreachable' || !result.ok) {
+      btn.disabled = false; btn.classList.remove('btn-loading');
+      msgEl.innerHTML = '<div class="msg-error">Couldn\'t reach Canvas. Double-check your URL â€” it should look like <strong>yourschool.instructure.com</strong> â€” and make sure you\'re connected to the internet.</div>'; return;
+    }
+    validCourses = result.courses;
+  } catch (e) {
+    btn.disabled = false; btn.classList.remove('btn-loading');
+    msgEl.innerHTML = '<div class="msg-error">Something went wrong. Please try again.</div>'; return;
+  }
+
+  // Credentials are good â€” pre-select only current-year courses so the user
+  // doesn't start with old concluded courses checked by default.
+  // IDs saved as strings to avoid JS float precision loss for large Canvas IDs.
+  const currentCourses = validCourses
+    .filter(c => !isCourseTermConcluded(c.name || ''))
+    .map(c => ({ id: String(c.id), name: c.name }));
+  const { ok, data } = await sbFetchWithRetry('/rest/v1/user_settings', 'POST', { user_id: USER_ID, canvas_url: url, canvas_token: token, selected_courses: currentCourses });
+  if (!ok) {
+    if (data && JSON.stringify(data).includes('duplicate')) {
+      await sbFetchWithRetry(`/rest/v1/user_settings?user_id=eq.${USER_ID}`, 'PATCH', { canvas_url: url, canvas_token: token, selected_courses: currentCourses });
+    } else {
+      btn.disabled = false; btn.classList.remove('btn-loading');
+      msgEl.innerHTML = '<div class="msg-error">Failed to save your settings. Please try again.</div>'; return;
+    }
+  }
+
+  btn.disabled = false; btn.classList.remove('btn-loading');
+  // Show the course selection step so users can confirm/adjust which classes they're taking.
+  await loadCoursesForSelection();
+  showOnboardCourses();
+}
+
+function renderCoursesForSelection(courses, existingIds = new Set(), concludedCodes = new Set()) {
+  selectedCoursesTemp = [];
+  document.getElementById('course-list-loading').style.display = 'none';
+  const listEl = document.getElementById('course-list');
+  listEl.innerHTML = '';
+
+  // Keep only courses from the current school year that are not concluded.
+  // Courses with no term tag (e.g. "Speech and Debate") are always shown.
+  const sy = getSchoolYear();
+  const filtered = (courses || []).filter(c => {
+    const n = (c.name || '').toUpperCase();
+    const hasTag = /\b(FAL|SPR|SUM|WIN)\d{2}\b/.test(n);
+    if (!hasTag) return true;
+    return isCurrentYearCourse(c.name, sy) && !isCourseTermConcluded(c.name);
+  });
+
+  if (filtered.length === 0) {
+    listEl.innerHTML = '<div class="course-loading">No current classes found in Canvas.</div>';
+    return;
+  }
+
+  const title = document.createElement('div');
+  title.className = 'course-section-title';
+  title.textContent = `Current classes (${sy.schoolYearShort})`;
+  listEl.appendChild(title);
+
+  filtered.forEach(course => {
+    const item = document.createElement('div');
+    const sectionCode = extractSectionCode(course.name);
+    // Pre-check if: directly in existing selection, OR is the current-semester equivalent
+    // of a concluded selection (same section code, different semester tag).
+    const preSelected = existingIds.has(String(course.id)) ||
+      (sectionCode !== null && concludedCodes.has(sectionCode));
+    item.className = 'course-item' + (preSelected ? ' selected' : '');
+    if (preSelected) selectedCoursesTemp.push({ id: String(course.id), name: course.name });
+    item.innerHTML = `<div class="course-check"><div class="course-check-inner"></div></div><div class="course-name">${course.name}</div>`;
+    item.onclick = () => {
+      const sel = item.classList.toggle('selected');
+      if (sel) selectedCoursesTemp.push({ id: String(course.id), name: course.name });
+      else selectedCoursesTemp = selectedCoursesTemp.filter(c => c.id !== String(course.id));
+    };
+    listEl.appendChild(item);
+  });
+}
+
+function extractSectionCode(name) {
+  if (!name) return null;
+  const m = name.match(/\|\s*(\S+)\s+--/);
+  return m ? m[1] : null;
+}
+
+async function loadCoursesForSelection() {
+  document.getElementById('course-list-loading').style.display = 'block';
+  document.getElementById('course-list').innerHTML = '';
+  selectedCoursesTemp = [];
+  // Fetch canvas credentials AND existing selected_courses so we can pre-check them
+  const { ok, data: settings } = await sbFetchWithRetry(`/rest/v1/user_settings?user_id=eq.${USER_ID}&select=canvas_url,canvas_token,selected_courses`);
+  if (!ok || !settings || settings.length === 0) return;
+  const existingSelected = settings[0].selected_courses || [];
+  // Pre-check non-concluded courses by ID; for concluded ones, pre-check their
+  // current-semester equivalents by section code (handles S1â†’S2 semester rollover).
+  const existingIds = new Set(
+    existingSelected.filter(c => !isCourseTermConcluded(c.name || '')).map(c => String(c.id))
+  );
+  const concludedCodes = new Set(
+    existingSelected
+      .filter(c => isCourseTermConcluded(c.name || ''))
+      .map(c => extractSectionCode(c.name))
+      .filter(Boolean)
+  );
+  try {
+    const validateResp = await fetch(`${SB_URL}/functions/v1/validate-canvas`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SB_KEY, 'Authorization': `Bearer ${ACCESS_TOKEN || SB_KEY}` },
+      body: JSON.stringify({ canvas_url: settings[0].canvas_url, canvas_token: settings[0].canvas_token })
+    });
+    const result = await validateResp.json();
+    const loadingEl = document.getElementById('course-list-loading');
+    if (result.error === 'invalid_token') {
+      loadingEl.textContent = 'Your Canvas token is no longer valid. Go back and generate a new one.';
+      loadingEl.style.display = 'block'; return;
+    }
+    if (!result.ok) {
+      loadingEl.textContent = 'Could not load courses. Check your Canvas URL and token, then go back to try again.';
+      loadingEl.style.display = 'block'; return;
+    }
+    renderCoursesForSelection(result.courses, existingIds, concludedCodes);
+  } catch(e) {
+    const loadingEl = document.getElementById('course-list-loading');
+    loadingEl.textContent = 'Could not load courses. Check your Canvas URL and token, then go back to try again.';
+    loadingEl.style.display = 'block';
+  }
+}
+
+async function saveSelectedCourses() {
+  const msgEl = document.getElementById('onboard-courses-msg');
+  msgEl.innerHTML = '';
+  if (selectedCoursesTemp.length === 0) { msgEl.innerHTML = '<div class="msg-error">Please select at least one class.</div>'; return; }
+  const btn = document.getElementById('ob-courses-btn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  await sbFetchWithRetry(`/rest/v1/user_settings?user_id=eq.${USER_ID}`, 'PATCH', { selected_courses: selectedCoursesTemp });
+  if (courseSelectionFromSettings) {
+    courseSelectionFromSettings = false;
+    btn.disabled = false; btn.textContent = 'Save classes';
+    showApp();
+    showPage('settings', document.getElementById('nav-settings'));
+    syncCanvas();
+  } else {
+    btn.disabled = false; btn.textContent = 'Continue';
+    showOnboardGoals();
+  }
+}
+
+function renderGoalsOnboard() {
+  const el = document.getElementById('goals-list-onboard');
+  el.innerHTML = onboardGoals.map((g, i) => `
+    <div class="goal-tag">
+      <div class="goal-tag-text">${g}</div>
+      <button class="goal-tag-remove" onclick="removeGoalOnboard(${i})">Ã—</button>
+    </div>`).join('');
+}
+
+function addGoalOnboard() {
+  const input = document.getElementById('ob-goal-input');
+  const val = input.value.trim();
+  if (!val) return;
+  onboardGoals.push(val); input.value = '';
+  renderGoalsOnboard();
+}
+
+function removeGoalOnboard(i) { onboardGoals.splice(i, 1); renderGoalsOnboard(); }
+
+async function finishOnboarding() {
+  const btn = document.getElementById('ob-goals-btn');
+  btn.disabled = true; btn.classList.add('btn-loading');
+  if (onboardGoals.length > 0) {
+    userGoals = onboardGoals;
+    localStorage.setItem('sf_goals', JSON.stringify(userGoals));
+    for (const g of onboardGoals) {
+      await sbFetchWithRetry('/rest/v1/goals', 'POST', { user_id: USER_ID, goal_text: g });
+    }
+  }
+  await syncCanvas();
+  btn.disabled = false; btn.classList.remove('btn-loading');
+  showApp();
+}
+
+function buildActionPlan(goalText) {
+  const steps = [];
+  const text = goalText.toLowerCase();
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  // Extract a subject keyword from the goal
+  const subjects = [
+    'english','math','science','history','biology','chemistry','physics',
+    'spanish','french','art','pe','health','economics','econ','data',
+    'sports','algebra','calculus','stats','statistics','writing','reading'
+  ];
+  const matchedSubject = subjects.find(s => text.includes(s));
+
+  // Match assignments to the subject keyword
+  const matchingAssignments = cachedAssignments.filter(a =>
+    !a.completed && a.due_date && matchedSubject &&
+    ((a.course||'').toLowerCase().includes(matchedSubject) || a.title.toLowerCase().includes(matchedSubject))
+  ).sort((a, b) => new Date(a.due_date) - new Date(b.due_date));
+
+  // Match grade to the subject keyword
+  const matchingGrade = matchedSubject
+    ? cachedGrades.find(g => cleanCourseName(g.course_name).toLowerCase().includes(matchedSubject))
+    : null;
+
+  // Step 1: current grade if found
+  if (matchingGrade) {
+    const score = matchingGrade.current_score != null ? parseFloat(matchingGrade.current_score) : null;
+    const letter = matchingGrade.current_grade || matchingGrade.final_grade || '';
+    const cn = cleanCourseName(matchingGrade.course_name);
+    steps.push(`Currently at ${score != null ? score.toFixed(1)+'% ' : ''}${letter ? '('+letter+')' : ''} in ${cn}`);
+  }
+
+  // Step 2: overdue assignments
+  const overdue = matchingAssignments.filter(a => new Date(a.due_date) < today);
+  if (overdue.length) {
+    steps.push(`Complete ${overdue.length} overdue item${overdue.length > 1 ? 's' : ''} â€” start with "${overdue[0].title}"`);
+  }
+
+  // Step 3: next upcoming assignments (up to 3)
+  const upcoming = matchingAssignments.filter(a => new Date(a.due_date) >= today).slice(0, 3);
+  for (const a of upcoming) {
+    const d = Math.round((new Date(a.due_date) - today) / (1000*60*60*24));
+    const dueStr = d === 0 ? 'today' : d === 1 ? 'tomorrow'
+      : new Date(a.due_date).toLocaleDateString('en-US', {month:'short',day:'numeric'});
+    steps.push(`Prepare "${a.title}" â€” due ${dueStr}`);
+  }
+
+  // Fallback generic advice
+  if (steps.length === 0) {
+    if (text.includes('raise') || text.includes('improve') || text.includes('better')) {
+      steps.push('Sync Canvas to pull your latest assignments');
+      steps.push('Check All Work for any overdue items');
+      steps.push('Mark assignments done as you finish them to track progress');
+    } else if (text.includes('miss') || text.includes('deadline') || text.includes('on top')) {
+      steps.push('Check Due Soon tab daily for what\'s coming up');
+      steps.push('Use Priority tab to focus on the most urgent work first');
+    } else {
+      steps.push('Sync Canvas in Settings to see your latest assignments');
+      steps.push('Check the Priority tab for what to tackle first');
+    }
+  }
+
+  return steps;
+}
+
+function renderGoalsTab() {
+  const el = document.getElementById('goals-display');
+  if (!el) return;
+  if (userGoals.length === 0) {
+    el.innerHTML = '<div style="color:#8e8e93;font-size:13px;padding:14px 0;">No goals set yet. Add one below!</div>';
+    return;
+  }
+  const colors = ['#d85a30','#007aff','#3b6d11','#854f0b','#534ab7'];
+  el.innerHTML = userGoals.map((g, i) => {
+    const plan = buildActionPlan(g);
+    const stepsHtml = plan.map(s =>
+      `<div class="goal-step"><span class="goal-step-arrow">â†’</span>${s}</div>`
+    ).join('');
+    return `<div class="goal-card">
+      <div class="goal-row">
+        <div class="goal-dot" style="background:${colors[i % colors.length]};"></div>
+        <div class="goal-text">${g}</div>
+        <button class="goal-remove" onclick="removeGoalMain(${i})">Ã—</button>
+      </div>
+      ${stepsHtml ? `<div class="goal-plan">${stepsHtml}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+async function addGoalMain() {
+  const input = document.getElementById('main-goal-input');
+  const val = input.value.trim();
+  if (!val) return;
+  userGoals.push(val); input.value = '';
+  localStorage.setItem('sf_goals', JSON.stringify(userGoals));
+  await sbFetchWithRetry('/rest/v1/goals', 'POST', { user_id: USER_ID, goal_text: val });
+  renderGoalsTab();
+}
+
+async function removeGoalMain(i) {
+  userGoals.splice(i, 1);
+  localStorage.setItem('sf_goals', JSON.stringify(userGoals));
+  renderGoalsTab();
+}
+
+async function renderSelectedCoursesTab() {
+  const { ok, data } = await sbFetchWithRetry(`/rest/v1/user_settings?user_id=eq.${USER_ID}&select=selected_courses`);
+  const el = document.getElementById('selected-courses-display');
+  if (!ok || !data || !data[0]?.selected_courses?.length) {
+    el.innerHTML = '<div style="color:#8e8e93;font-size:13px;">No classes selected.</div>'; return;
+  }
+  el.innerHTML = data[0].selected_courses.map(c => `<div class="grade-row"><span class="grade-name">${c.name}</span></div>`).join('');
+}
+
+async function loadCanvasSettings() {
+  const { ok, data } = await sbFetchWithRetry(`/rest/v1/user_settings?user_id=eq.${USER_ID}&select=canvas_url,canvas_token`);
+  if (ok && data && data.length > 0 && data[0].canvas_token) {
+    document.getElementById('canvas-connected').style.display = 'block';
+    document.getElementById('canvas-form').style.display = 'none';
+    document.getElementById('canvas-url-display').textContent = data[0].canvas_url;
+  } else {
+    document.getElementById('canvas-connected').style.display = 'none';
+    document.getElementById('canvas-form').style.display = 'block';
+  }
+}
+
+async function saveCanvasSettings() {
+  const url = document.getElementById('canvas-url').value.trim().replace(/^https?:\/\//,'').replace(/\/$/,'');
+  const token = document.getElementById('canvas-token').value.trim();
+  const msgEl = document.getElementById('canvas-msg');
+  if (!url || !token) { msgEl.innerHTML = '<div class="msg-error">Please enter both fields.</div>'; return; }
+  msgEl.innerHTML = '<div style="color:var(--text2);font-size:13px;">Validatingâ€¦</div>';
+
+  // Validate token and get courses before saving â€” same flow as onboarding
+  let validCourses;
+  try {
+    const validateResp = await fetch(`${SB_URL}/functions/v1/validate-canvas`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SB_KEY, 'Authorization': `Bearer ${ACCESS_TOKEN || SB_KEY}` },
+      body: JSON.stringify({ canvas_url: url, canvas_token: token })
+    });
+    const result = await validateResp.json();
+    if (result.error === 'invalid_token') {
+      msgEl.innerHTML = '<div class="msg-error">Token not accepted by Canvas. Generate a new one and try again.</div>'; return;
+    }
+    if (result.error === 'forbidden') {
+      msgEl.innerHTML = '<div class="msg-error">Canvas denied access. Make sure your token has permission to read courses.</div>'; return;
+    }
+    if (!result.ok) {
+      msgEl.innerHTML = '<div class="msg-error">Couldn\'t reach Canvas. Check your URL and try again.</div>'; return;
+    }
+    validCourses = result.courses;
+  } catch(e) {
+    msgEl.innerHTML = '<div class="msg-error">Something went wrong. Please try again.</div>'; return;
+  }
+
+  // Save URL, token, and auto-select all non-concluded courses atomically.
+  // Filter out concluded terms to match onboarding behavior â€” prevents Fall courses
+  // from re-entering selected_courses when a user re-enters credentials in Spring.
+  // IDs saved as strings to avoid JS float precision loss for large Canvas IDs.
+  const allCourses = validCourses
+    .filter(c => !isCourseTermConcluded(c.name || ''))
+    .map(c => ({ id: String(c.id), name: c.name }));
+  await sbFetchWithRetry(`/rest/v1/user_settings?user_id=eq.${USER_ID}`, 'PATCH', {
+    canvas_url: url, canvas_token: token, selected_courses: allCourses
+  });
+  msgEl.innerHTML = '';
+  loadCanvasSettings();
+  syncCanvas();
+}
+
+async function disconnectCanvas() {
+  await sbFetchWithRetry(`/rest/v1/user_settings?user_id=eq.${USER_ID}`, 'PATCH', { canvas_token: null, selected_courses: [] });
+  await sbFetchWithRetry(`/rest/v1/assignments?user_id=eq.${USER_ID}`, 'DELETE');
+  showOnboardCanvas();
+}
+
+let courseSelectionFromSettings = false;
+
+async function showCourseSelection() {
+  courseSelectionFromSettings = true;
+  document.getElementById('ob-courses-btn').textContent = 'Save classes';
+  await loadCoursesForSelection(); showOnboardCourses();
+}
+
+function toggleCanvasHelp() {
+  const content = document.getElementById('canvas-help-content');
+  const arrow = document.getElementById('canvas-help-arrow');
+  const isOpen = content.style.display !== 'none';
+  content.style.display = isOpen ? 'none' : 'block';
+  arrow.classList.toggle('open', !isOpen);
+}
+
+function toggleSettingsCanvasHelp() {
+  const content = document.getElementById('settings-canvas-help-content');
+  const arrow = document.getElementById('settings-canvas-help-arrow');
+  const isOpen = content.style.display !== 'none';
+  content.style.display = isOpen ? 'none' : 'block';
+  arrow.classList.toggle('open', !isOpen);
+}
+
+async function syncCanvas() {
+  const btn = document.getElementById('sync-btn');
+  const statusEl = document.getElementById('sync-status');
+  if (btn) { btn.disabled = true; btn.classList.add('btn-loading'); }
+  if (statusEl) { statusEl.className = 'sync-status'; statusEl.textContent = ''; }
+  try {
+    // Ensure we have a fresh token before calling the edge function
+    if (REFRESH_TOKEN) await refreshSession();
+    const resp = await fetch(`${SB_URL}/functions/v1/canvas-sync-v3`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SB_KEY, 'Authorization': `Bearer ${ACCESS_TOKEN || SB_KEY}` },
+      body: JSON.stringify({ user_id: USER_ID })
+    });
+    const result = await resp.json();
+    if (!resp.ok) throw new Error(result.message || result.error || 'Sync failed');
+    await Promise.all([loadAssignments(), loadGrades()]);
+    localStorage.setItem('sf_last_sync', Date.now());
+    updateLastSyncedLabel();
+    if (btn) { btn.disabled = false; btn.classList.remove('btn-loading'); }
+    if (statusEl) {
+      const blocked = result.blocked_courses || 0;
+      const notFound = Array.isArray(result.not_found_courses) ? result.not_found_courses : [];
+      const totalA = result.assignments || 0;
+      const activeA = result.active_assignments != null ? result.active_assignments : totalA;
+      const gradeCount = result.grades || 0;
+      let msg = totalA === 0
+        ? `Synced â€” no assignments found, ${gradeCount} grade${gradeCount !== 1 ? 's' : ''}.`
+        : activeA < totalA
+          ? `Synced â€” ${activeA} assignment${activeA !== 1 ? 's' : ''} to do (${totalA} found, ${totalA - activeA} completed), ${gradeCount} grade${gradeCount !== 1 ? 's' : ''}.`
+          : `Synced â€” ${activeA} assignment${activeA !== 1 ? 's' : ''}, ${gradeCount} grade${gradeCount !== 1 ? 's' : ''}.`;
+      if (notFound.length > 0) {
+        const names = notFound.map(n => {
+          // Show just the course title (strip the administrative suffix after " - S1/S2" or "|")
+          return (n || '').replace(/\s*\|.*$/, '').replace(/\s*-\s*S[12]\s*-.*$/i, '').trim();
+        }).join(', ');
+        msg += `\nâš  ${notFound.length} course${notFound.length > 1 ? 's' : ''} not found in Canvas: ${names}. Try updating your Canvas token in Settings.`;
+      }
+      if (blocked > 0) {
+        msg += `\n${blocked} course${blocked > 1 ? 's' : ''} couldn't be fetched â€” your school may have restricted Canvas API access for those courses.`;
+      }
+      statusEl.className = notFound.length > 0 || blocked > 0 ? 'sync-status warning' : 'sync-status success';
+      statusEl.textContent = msg;
+      statusEl.style.whiteSpace = 'pre-wrap';
+    }
+  } catch(err) {
+    if (btn) { btn.disabled = false; btn.classList.remove('btn-loading'); }
+    if (statusEl) { statusEl.className = 'sync-status error'; statusEl.textContent = `Sync failed: ${err.message}`; }
+  }
+}
+
+async function loadAssignments() {
+  const { ok, data } = await sbFetchWithRetry(`/rest/v1/assignments?user_id=eq.${USER_ID}&completed=eq.false&order=due_date.asc.nullslast&select=*`);
+  // Always reset stale empty/loading states before deciding what to show
+  document.getElementById('due-loading').style.display   = 'none';
+  document.getElementById('allwork-loading').style.display = 'none';
+  document.getElementById('due-empty').style.display     = 'none';
+  document.getElementById('allwork-empty').style.display = 'none';
+  document.getElementById('priority-empty').style.display = 'none';
+
+  const rawAssignments = Array.isArray(data) ? data : [];
+  // Hide assignments that are locked AND due more than 30 days ago â€”
+  // those are old enough that no action is realistically possible.
+  // Assignments locked within the last 30 days remain visible so students
+  // can see recent missed work and follow up with their teacher.
+  const lockCutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const assignments = rawAssignments.filter(a =>
+    !(a.is_locked && a.due_date && new Date(a.due_date) < lockCutoff)
+  );
+  if (!ok || assignments.length === 0) {
+    console.warn('[loadAssignments] no data â€” ok:', ok, 'raw:', rawAssignments.length);
+    document.getElementById('due-empty').style.display     = 'block';
+    document.getElementById('allwork-empty').style.display = 'block';
+    document.getElementById('priority-empty').style.display = 'block';
+    return;
+  }
+  console.log('[loadAssignments] rendering', assignments.length, 'assignments');
+  cachedAssignments = assignments;
+  renderDueSoon(assignments);
+  renderAllWork(assignments);
+  renderPriority(assignments);
+  renderGoalsTab();
+}
+
+function cleanCourseName(name) {
+  // Strip common Canvas administrative suffixes, preserve the actual course title.
+  // Handles formats like:
+  //   "English 12 H - S2 - TEACHER, F | section -- SPR26 - P01"  â†’ "English 12 H"
+  //   "MATH 101 - Fall 2025 | 12345"                              â†’ "MATH 101 - Fall 2025"
+  //   "AP Calculus AB"                                            â†’ "AP Calculus AB"
+  return (name || '')
+    // Strip " | anything" (section/ID separator used by many schools)
+    .replace(/\s*\|.*$/, '')
+    // Strip " -- anything" (double-dash separator)
+    .replace(/\s*--.*$/, '')
+    // Strip " - S1/S2/Sem1/Sem2 - anything" (semester section indicator followed by teacher)
+    .replace(/\s*-\s*(?:S[12]|Sem\s*[12])\s*-.*$/i, '')
+    .trim();
+}
+
+async function loadGrades() {
+  const loadEl = document.getElementById('grades-loading');
+  const emptyEl = document.getElementById('grades-empty');
+  const listEl = document.getElementById('grades-list');
+  const cardsEl = document.getElementById('grades-cards');
+  if (loadEl) loadEl.style.display = 'block';
+  if (emptyEl) emptyEl.style.display = 'none';
+  if (listEl) listEl.style.display = 'none';
+
+  const { ok, data: grades } = await sbFetchWithRetry(`/rest/v1/grades?user_id=eq.${USER_ID}&order=course_name.asc`);
+  if (loadEl) loadEl.style.display = 'none';
+  if (!ok || !grades) { if (emptyEl) emptyEl.style.display = 'block'; return; }
+
+  cachedGrades = grades;
+  renderGoalsTab(); // refresh action plans with grade data
+
+  // Only show courses that actually have a grade published
+  const withGrades = grades.filter(g =>
+    g.current_score != null || g.final_score != null || g.current_grade || g.final_grade
+  );
+
+  if (withGrades.length === 0) { if (emptyEl) emptyEl.style.display = 'block'; return; }
+
+  if (cardsEl) {
+    cardsEl.innerHTML = withGrades.map(g => {
+      const score = g.current_score != null ? parseFloat(g.current_score) : parseFloat(g.final_score);
+      const letter = g.current_grade || g.final_grade || '';
+      const cleanName = cleanCourseName(g.course_name);
+      let letterClass = 'grade-df';
+      if (letter.startsWith('A')) letterClass = 'grade-a';
+      else if (letter.startsWith('B')) letterClass = 'grade-b';
+      else if (letter.startsWith('C')) letterClass = 'grade-c';
+      const scoreText = !isNaN(score) ? `${score.toFixed(1)}%` : '';
+      const barColors = { 'grade-a': 'var(--green)', 'grade-b': 'var(--accent)', 'grade-c': 'var(--amber)', 'grade-df': 'var(--red)' };
+      const barColor = barColors[letterClass] || 'var(--accent)';
+      const barWidth = !isNaN(score) ? Math.min(Math.max(score, 0), 100) : 0;
+      return `<div class="card grade-card">
+        <div class="grade-card-left">
+          <div class="grade-card-name">${cleanName}</div>
+          ${barWidth > 0 ? `<div class="grade-bar-wrap"><div class="grade-bar" style="width:${barWidth}%;background:${barColor}"></div></div>` : ''}
+        </div>
+        <div class="grade-card-right">
+          <div class="grade-card-letter ${letterClass}">${letter || 'â€”'}</div>
+          ${scoreText ? `<div class="grade-card-pct">${scoreText}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+  if (listEl) listEl.style.display = 'block';
+}
+
+function getBadge(type) {
+  const t = (type || '').toLowerCase();
+  if (t.includes('quiz')) return ['badge-quiz','Quiz'];
+  if (t.includes('online_upload')||t.includes('test')||t.includes('exam')) return ['badge-test','Test'];
+  if (t.includes('essay')||t.includes('paper')) return ['badge-essay','Essay'];
+  if (t.includes('discussion')) return ['badge-discussion','Discussion'];
+  return ['badge-hw','Homework'];
+}
+
+function getDueText(due_date, isOverdue) {
+  if (!due_date) return `<div class="due-ok">No due date</div>`;
+  const due = new Date(due_date);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const d = Math.round((due - today) / (1000*60*60*24));
+  if (isOverdue) return `<div class="due-soon">${Math.abs(d)} day${Math.abs(d)!==1?'s':''} overdue</div>`;
+  if (d === 0) return `<div class="due-soon">Due today</div>`;
+  if (d === 1) return `<div class="due-soon">Due tomorrow</div>`;
+  return `<div class="due-ok">Due ${due.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>`;
+}
+
+function doneKey(a) { return encodeURIComponent(`${a.title}||${a.course}`); }
+
+function aCard(a, isOverdue, redTint=false) {
+  const [bc, bl] = getBadge(a.assignment_type);
+  const key = doneKey(a);
+  const isDone = a.completed || doneSet.has(decodeURIComponent(key));
+  const cardClass = `card${isDone ? ' done' : ''}${redTint && !isDone ? ' overdue-card' : ''}`;
+  const overdueTag = redTint && !isDone ? `<span class="overdue-pill">OVERDUE</span>` : '';
+  const titleInner = a.assignment_url
+    ? `<a href="${a.assignment_url}" target="_blank" rel="noopener noreferrer" class="card-title-link">${a.title}${overdueTag}</a>`
+    : `${a.title}${overdueTag}`;
+  const canvasLink = a.assignment_url
+    ? `<a href="${a.assignment_url}" target="_blank" rel="noopener noreferrer" class="canvas-link">Open in Canvas â†’</a>`
+    : '';
+  return `<div class="${cardClass}">
+    <div class="card-row" style="gap:10px;align-items:center;">
+      <button class="done-check${isDone ? ' checked' : ''}" onclick="toggleDone('${key}',this)" title="Mark as done"><span class="done-check-icon">âœ“</span></button>
+      <div style="flex:1;min-width:0;">
+        <div class="card-row"><div style="flex:1;min-width:0;"><div class="card-title">${titleInner}</div><div class="card-sub">${a.course||''}</div></div><span class="badge ${bc}">${bl}</span></div>
+        ${getDueText(a.due_date, isOverdue)}
+        ${canvasLink}
+      </div>
+    </div>
+  </div>`;
+}
+
+function toggleDone(encodedKey, btn) {
+  const key = decodeURIComponent(encodedKey);
+  const card = btn.closest('.card');
+  if (doneSet.has(key)) {
+    doneSet.delete(key);
+    btn.classList.remove('checked');
+    card.classList.remove('done');
+  } else {
+    doneSet.add(key);
+    btn.classList.add('checked');
+    card.classList.add('done');
+  }
+  localStorage.setItem('sf_done_' + USER_ID, JSON.stringify([...doneSet]));
+}
+
+function renderDueSoon(assignments) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const weekFromNow = new Date(today); weekFromNow.setDate(today.getDate()+7);
+  let overdue=[], soon=[], later=[];
+  assignments.forEach(a => {
+    if (a.completed || doneSet.has(decodeURIComponent(doneKey(a)))) return;
+    if (!a.due_date) { later.push(a); return; }
+    const due = new Date(a.due_date); due.setHours(0,0,0,0);
+    if (due < today) overdue.push(a);
+    else if (due <= weekFromNow) soon.push(a);
+    else later.push(a);
+  });
+  document.getElementById('stat-week').textContent = soon.length;
+  document.getElementById('stat-overdue').textContent = overdue.length;
+  if (overdue.length + soon.length + later.length === 0) {
+    document.getElementById('due-empty').style.display = 'block';
+    return;
+  }
+  document.getElementById('due-list').style.display = 'block';
+  if (overdue.length) { document.getElementById('overdue-section').style.display='block'; document.getElementById('overdue-list').innerHTML=overdue.map(a=>aCard(a,true,true)).join(''); }
+  else { document.getElementById('overdue-section').style.display='none'; }
+  if (soon.length) { document.getElementById('soon-section').style.display='block'; document.getElementById('soon-list').innerHTML=soon.map(a=>aCard(a,false)).join(''); }
+  else { document.getElementById('soon-section').style.display='none'; }
+  if (later.length) { document.getElementById('later-section').style.display='block'; document.getElementById('later-list').innerHTML=later.map(a=>aCard(a,false)).join(''); }
+  else { document.getElementById('later-section').style.display='none'; }
+}
+
+function renderAllWork(assignments) {
+  document.getElementById('allwork-list').style.display = 'block';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const weekFromNow = new Date(today); weekFromNow.setDate(today.getDate()+7);
+  let overdue=[], soon=[], upcoming=[];
+  assignments.forEach(a => {
+    if (a.completed || doneSet.has(decodeURIComponent(doneKey(a)))) return;
+    if (!a.due_date) { upcoming.push(a); return; }
+    const due = new Date(a.due_date); due.setHours(0,0,0,0);
+    if (due < today) overdue.push(a);
+    else if (due <= weekFromNow) soon.push(a);
+    else upcoming.push(a);
+  });
+  // Within each group: undone first, done last; overdue sorted most overdue first
+  const sortGroup = (arr, reverseDate=false) => [...arr].sort((a, b) => {
+    const aDone = doneSet.has(decodeURIComponent(doneKey(a))) ? 1 : 0;
+    const bDone = doneSet.has(decodeURIComponent(doneKey(b))) ? 1 : 0;
+    if (aDone !== bDone) return aDone - bDone;
+    const aD = a.due_date ? new Date(a.due_date) : new Date('9999');
+    const bD = b.due_date ? new Date(b.due_date) : new Date('9999');
+    return reverseDate ? aD - bD : aD - bD;
+  });
+  let html = '';
+  if (overdue.length) {
+    html += `<div class="section-label" style="color:#c0392b;">Overdue</div>`;
+    html += sortGroup(overdue).map(a => aCard(a, true, true)).join('');
+  }
+  if (soon.length) {
+    html += `<div class="section-label">Due Soon</div>`;
+    html += sortGroup(soon).map(a => aCard(a, false)).join('');
+  }
+  if (upcoming.length) {
+    html += `<div class="section-label">Upcoming</div>`;
+    html += sortGroup(upcoming).map(a => aCard(a, false)).join('');
+  }
+  document.getElementById('allwork-list').innerHTML = html || '<div class="empty-box"><div class="empty-title">No assignments</div></div>';
+}
+
+function renderPriority(assignments) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const todayStr = today.toDateString();
+
+  // Completed today â€” show at bottom with undo
+  const completedToday = assignments.filter(a =>
+    a.completed && a.completed_at && new Date(a.completed_at).toDateString() === todayStr
+  );
+
+  // Active: has due date, not completed, not more than 7 days overdue
+  const active = assignments.filter(a => {
+    if (!a.due_date || a.completed) return false;
+    const d = Math.round((new Date(a.due_date) - today) / (1000*60*60*24));
+    return d >= -7;
+  });
+
+  const listEl = document.getElementById('priority-list');
+  const emptyEl = document.getElementById('priority-empty');
+
+  if (active.length === 0 && completedToday.length === 0) {
+    emptyEl.style.display = 'block';
+    listEl.innerHTML = '';
+    document.getElementById('priority-ai-text').textContent = 'No upcoming assignments â€” you\'re all caught up!';
+    return;
+  }
+  emptyEl.style.display = 'none';
+
+  const scored = active.map(a => {
+    const d = Math.round((new Date(a.due_date) - today) / (1000*60*60*24));
+    let score = d < 0 ? 1000 + Math.abs(d) : 100 - d;
+    for (const goal of userGoals) {
+      const g = goal.toLowerCase().split(' ')[0];
+      if ((a.course||'').toLowerCase().includes(g) || a.title.toLowerCase().includes(g)) score += 50;
+    }
+    return { ...a, score, d };
+  }).sort((a, b) => b.score - a.score);
+
+  const colors = ['p1','p2','p3','p4','p5'];
+  let html = scored.slice(0, 5).map((a, i) => {
+    const [bc, bl] = getBadge(a.assignment_type);
+    const dueText = a.d < 0 ? `<span style="color:#d85a30;">${Math.abs(a.d)}d overdue</span>`
+      : a.d===0 ? `<span style="color:#d85a30;">due today</span>`
+      : a.d===1 ? `<span style="color:#d85a30;">due tomorrow</span>`
+      : `due ${new Date(a.due_date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}`;
+    return `<div class="priority-card">
+      <button class="priority-check" onclick="markPriorityDone('${a.id}')" title="Mark as done">âœ“</button>
+      <div class="priority-num ${colors[i]||'p5'}">${i+1}</div>
+      <div class="priority-info">
+        <div class="card-row"><div class="card-title">${a.title}</div><span class="badge ${bc}">${bl}</span></div>
+        <div class="card-sub" style="margin-top:3px;">${a.course||''} Â· ${dueText}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  if (completedToday.length > 0) {
+    html += `<div class="priority-completed-section">
+      <div class="priority-completed-label">Completed today</div>
+      ${completedToday.map(a => {
+        const [bc, bl] = getBadge(a.assignment_type);
+        return `<div class="priority-card completed-card">
+          <button class="priority-check" style="border-color:#4caf50;color:#4caf50;" onclick="undoPriorityDone('${a.id}')" title="Undo">âœ“</button>
+          <div class="priority-num p5" style="opacity:0.5;">âœ“</div>
+          <div class="priority-info">
+            <div class="card-row"><div class="card-title">${a.title}</div><span class="badge ${bc}">${bl}</span></div>
+            <div class="card-sub" style="margin-top:3px;">${a.course||''}</div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  listEl.innerHTML = html;
+
+  if (scored.length > 0) {
+    const top = scored[0];
+    const matchingGoal = userGoals.find(g => (top.course||'').toLowerCase().includes(g.toLowerCase().split(' ')[0]));
+    let aiText = matchingGoal
+      ? `"${top.title}" is your top priority â€” and it's in a class tied to your goal: "${matchingGoal}". Start here.`
+      : top.d < 0 ? `"${top.title}" is overdue. Take care of that first.`
+      : top.d <= 1 ? `"${top.title}" is due ${top.d===0?'today':'tomorrow'} â€” that's your top priority.`
+      : `Your most urgent assignment is "${top.title}", due in ${top.d} days. Start there.`;
+    document.getElementById('priority-ai-text').textContent = aiText;
+  }
+}
+
+async function markPriorityDone(id) {
+  const now = new Date().toISOString();
+  await sbFetchWithRetry(
+    `/rest/v1/assignments?id=eq.${id}&user_id=eq.${USER_ID}`,
+    'PATCH',
+    { completed: true, completed_at: now }
+  );
+  cachedAssignments = cachedAssignments.map(a =>
+    a.id === id ? { ...a, completed: true, completed_at: now } : a
+  );
+  renderPriority(cachedAssignments);
+}
+
+async function undoPriorityDone(id) {
+  await sbFetchWithRetry(
+    `/rest/v1/assignments?id=eq.${id}&user_id=eq.${USER_ID}`,
+    'PATCH',
+    { completed: false, completed_at: null }
+  );
+  cachedAssignments = cachedAssignments.map(a =>
+    a.id === id ? { ...a, completed: false, completed_at: null } : a
+  );
+  renderPriority(cachedAssignments);
+}
+
+function showPage(name, el, fromNav) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if (el) el.classList.add('active');
+  // Keep both nav and tab in sync
+  const navEl = document.getElementById('nav-'+name);
+  if (navEl) navEl.classList.add('active');
+}
+
+function calculateFinal() {
+  const current = parseFloat(document.getElementById('calc-current').value);
+  const weight  = parseFloat(document.getElementById('calc-weight').value) / 100;
+  const target  = parseFloat(document.getElementById('calc-target').value);
+  const resultEl = document.getElementById('calc-result');
+  const labelEl  = document.getElementById('calc-result-label');
+  const scoreEl  = document.getElementById('calc-result-score');
+  const msgEl    = document.getElementById('calc-result-msg');
+
+  if (isNaN(current) || isNaN(weight) || isNaN(target) || weight <= 0) {
+    resultEl.style.display = 'none'; return;
+  }
+
+  const needed = (target - (1 - weight) * current) / weight;
+  resultEl.style.display = 'block';
+
+  if (needed < 0) {
+    resultEl.style.background = 'var(--connected-bg)';
+    labelEl.style.color = scoreEl.style.color = msgEl.style.color = 'var(--connected-color)';
+    labelEl.textContent = 'Already secured';
+    scoreEl.textContent = 'ðŸŽ‰';
+    msgEl.textContent = "You've already hit your target â€” even a 0% on the final keeps you there.";
+  } else if (needed > 100) {
+    resultEl.style.background = 'var(--error-bg)';
+    labelEl.style.color = scoreEl.style.color = msgEl.style.color = 'var(--error-color)';
+    labelEl.textContent = 'Not possible';
+    scoreEl.textContent = `${needed.toFixed(1)}%`;
+    msgEl.textContent = "Even a perfect score won't get you there. Aim as high as you can.";
+  } else if (needed >= 90) {
+    resultEl.style.background = 'var(--ai-bg)';
+    labelEl.style.color = 'var(--ai-label)';
+    scoreEl.style.color = 'var(--ai-label)';
+    msgEl.style.color = 'var(--ai-text)';
+    labelEl.textContent = 'You need';
+    scoreEl.textContent = `${needed.toFixed(1)}%`;
+    msgEl.textContent = "Challenging â€” you'll need to bring your A-game.";
+  } else {
+    resultEl.style.background = 'var(--connected-bg)';
+    labelEl.style.color = scoreEl.style.color = msgEl.style.color = 'var(--connected-color)';
+    labelEl.textContent = 'You need';
+    scoreEl.textContent = `${needed.toFixed(1)}%`;
+    msgEl.textContent = needed < 60 ? "You're in great shape â€” very achievable." : "Totally doable. You've got this.";
+  }
+}
+
+function updateLastSyncedLabel() {
+  const dateEl = document.getElementById('topbar-date');
+  if (!dateEl) return;
+  const n = new Date();
+  const dateStr = `${days[n.getDay()]}, ${months[n.getMonth()]} ${n.getDate()}`;
+  const lastSync = parseInt(localStorage.getItem('sf_last_sync') || '0');
+  if (!lastSync) { dateEl.textContent = dateStr; return; }
+  const mins = Math.round((Date.now() - lastSync) / 60000);
+  let syncStr;
+  if (mins < 1) syncStr = 'Synced just now';
+  else if (mins < 60) syncStr = `Synced ${mins}m ago`;
+  else { const h = Math.floor(mins / 60); syncStr = `Synced ${h}h ago`; }
+  dateEl.textContent = `${dateStr} Â· ${syncStr}`;
+}
+
+async function autoSync() {
+  const lastSync = parseInt(localStorage.getItem('sf_last_sync') || '0');
+  if (Date.now() - lastSync > 24 * 60 * 60 * 1000) {
+    await syncCanvas();
+  }
+}
+
+function applyTheme(dark) {
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  const btn = document.getElementById('theme-btn');
+  if (btn) btn.textContent = dark ? 'â˜€ï¸' : 'ðŸŒ™';
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  localStorage.setItem('sf_theme', isDark ? 'light' : 'dark');
+  applyTheme(!isDark);
+}
+
+applyTheme(localStorage.getItem('sf_theme') === 'dark');
+
+routeUser();
+
+/* â”€â”€ Welcome Screen â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+(function () {
+  // Per-user key so each account on the same device has its own 24h timer
+  const wsKey = () => `sf_last_welcome_${typeof USER_ID !== 'undefined' ? USER_ID : ''}`;
+  const DAY_MS = 24 * 60 * 60 * 1000;
+  let wsNewAssignments = [];
+
+  function wsPopulateHeader() {
+    const name = USER_NAME ? `, ${USER_NAME}` : '';
+    document.getElementById('ws-heading').textContent = `Welcome back${name}`;
+    const now = new Date();
+    const dayNames   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    document.getElementById('ws-date').textContent =
+      `${dayNames[now.getDay()]}, ${monthNames[now.getMonth()]} ${now.getDate()}`;
+  }
+
+  // Replaces the existing maybeShowWelcome (assignment wins over hoisted declaration)
+  window.maybeShowWelcome = function () {
+    const last = parseInt(localStorage.getItem(wsKey()) || '0', 10);
+    if (Date.now() - last < DAY_MS) return;
+
+    wsPopulateHeader();
+
+    // Reset to initial state
+    document.getElementById('ws-welcome').style.display = 'block';
+    document.getElementById('ws-result').style.display  = 'none';
+    const syncBtn = document.getElementById('ws-sync-btn');
+    syncBtn.disabled    = false;
+    syncBtn.textContent = 'Sync assignments';
+
+    document.getElementById('ws-overlay').style.display = 'flex';
+  };
+
+  window.wsClose = function () {
+    localStorage.setItem(wsKey(), String(Date.now()));
+    document.getElementById('ws-overlay').style.display      = 'none';
+    document.getElementById('ws-list-overlay').style.display = 'none';
+  };
+
+  window.wsSync = async function () {
+    const btn = document.getElementById('ws-sync-btn');
+    btn.disabled = true;
+
+    const wsMessages = [
+      'Checking your Canvasâ€¦',
+      'Grabbing your assignmentsâ€¦',
+      'Seeing what\'s due soonâ€¦',
+      'Almost thereâ€¦',
+      'Calculating your prioritiesâ€¦',
+      'Getting you organizedâ€¦',
+      'Syncing your gradesâ€¦',
+      'Loading your workloadâ€¦',
+    ];
+    let wsMsgIdx = 0;
+    btn.textContent = wsMessages[0];
+    const wsMsgTimer = setInterval(() => {
+      wsMsgIdx = (wsMsgIdx + 1) % wsMessages.length;
+      btn.textContent = wsMessages[wsMsgIdx];
+    }, 2000);
+
+    // Snapshot current assignment keys before sync
+    const beforeKeys = new Set(
+      cachedAssignments.map(a => `${a.title}||${a.course}`)
+    );
+
+    await syncCanvas();
+    clearInterval(wsMsgTimer);
+
+    // New = in the post-sync cache but not in the pre-sync snapshot, and not already completed
+    wsNewAssignments = cachedAssignments.filter(
+      a => !beforeKeys.has(`${a.title}||${a.course}`) && !a.completed
+    );
+
+    // Switch to result state
+    document.getElementById('ws-welcome').style.display = 'none';
+    document.getElementById('ws-result').style.display  = 'block';
+
+    const countEl   = document.getElementById('ws-result-count');
+    const subEl     = document.getElementById('ws-result-sub');
+    const viewBtn   = document.getElementById('ws-view-btn');
+
+    if (wsNewAssignments.length > 0) {
+      const n = wsNewAssignments.length;
+      countEl.textContent   = `${n} new assignment${n !== 1 ? 's' : ''} found`;
+      subEl.textContent     = 'Tap below to review what\'s new.';
+      viewBtn.style.display = 'block';
+    } else {
+      countEl.textContent   = 'All caught up!';
+      subEl.textContent     = 'No new assignments since your last sync.';
+      viewBtn.style.display = 'none';
+    }
+  };
+
+  window.wsViewNew = function () {
+    const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    document.getElementById('ws-list-items').innerHTML = wsNewAssignments.map(a => {
+      const due = a.due_date ? new Date(a.due_date) : null;
+      const dueStr = due
+        ? `${monthNames[due.getMonth()]} ${due.getDate()}`
+        : 'No due date';
+      const wsLink = a.assignment_url
+        ? `<a href="${a.assignment_url}" target="_blank" rel="noopener noreferrer" class="canvas-link">Open in Canvas â†’</a>`
+        : '';
+      return `<div class="ws-a-card">
+        <div class="ws-a-title">${a.title}</div>
+        <div class="ws-a-meta">${a.course || ''} Â· Due ${dueStr}</div>
+        ${wsLink}
+      </div>`;
+    }).join('');
+    document.getElementById('ws-list-overlay').style.display = 'block';
+  };
+
+  window.wsCloseList = function () {
+    document.getElementById('ws-list-overlay').style.display = 'none';
+  };
+}());
+</script>
+</body>
+</html>
+
