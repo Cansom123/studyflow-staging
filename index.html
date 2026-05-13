@@ -651,6 +651,18 @@ body {
 /* Welcome toast */
 #welcome-toast { font-family: 'DM Sans', sans-serif !important; }
 
+/* Study Timer */
+.timer-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--card-radius); padding: 18px 20px; margin-top: 8px; }
+.timer-display { font-size: 42px; font-weight: 700; letter-spacing: -1px; text-align: center; color: var(--text1); margin: 12px 0; font-variant-numeric: tabular-nums; }
+.timer-modes { display: flex; gap: 8px; justify-content: center; margin-bottom: 14px; flex-wrap: wrap; }
+.timer-mode-btn { padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface2); color: var(--text2); font-size: 13px; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.timer-mode-btn.active { background: var(--accent-soft); color: var(--accent-text); border-color: var(--accent); font-weight: 600; }
+.timer-start-btn { width: 100%; padding: 12px; border-radius: 12px; background: var(--accent); color: #fff; font-size: 15px; font-weight: 600; border: none; cursor: pointer; font-family: inherit; transition: opacity 0.15s; }
+.timer-start-btn:hover { opacity: 0.88; }
+
+/* Type filter row */
+.type-filter-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+
 /* ===== MOBILE ===== */
 @media (max-width: 600px) {
   body { padding: 0; align-items: stretch; }
@@ -946,6 +958,14 @@ body {
           <div class="empty-sub">No upcoming assignments. Hit sync in Settings or check back later.</div>
         </div>
         <div id="due-list" style="display:none;">
+          <div class="type-filter-row" id="due-filter-row">
+            <button class="timer-mode-btn active" onclick="setTypeFilter('due','')">All</button>
+            <button class="timer-mode-btn" onclick="setTypeFilter('due','quiz')">Quiz</button>
+            <button class="timer-mode-btn" onclick="setTypeFilter('due','test')">Test</button>
+            <button class="timer-mode-btn" onclick="setTypeFilter('due','essay')">Essay</button>
+            <button class="timer-mode-btn" onclick="setTypeFilter('due','discussion')">Discussion</button>
+            <button class="timer-mode-btn" onclick="setTypeFilter('due','hw')">Homework</button>
+          </div>
           <div class="stats-row">
             <div class="stat-card"><div class="stat-label">Due this week</div><div class="stat-val" id="stat-week">0</div></div>
             <div class="stat-card"><div class="stat-label">Overdue</div><div class="stat-val" id="stat-overdue" style="color:#d85a30;">0</div></div>
@@ -964,6 +984,14 @@ body {
           <div class="empty-title">No assignments found</div>
           <div class="empty-sub">Sync your Canvas account in Settings.</div>
         </div>
+        <div class="type-filter-row" id="allwork-filter-row" style="display:none;">
+          <button class="timer-mode-btn active" onclick="setTypeFilter('allwork','')">All</button>
+          <button class="timer-mode-btn" onclick="setTypeFilter('allwork','quiz')">Quiz</button>
+          <button class="timer-mode-btn" onclick="setTypeFilter('allwork','test')">Test</button>
+          <button class="timer-mode-btn" onclick="setTypeFilter('allwork','essay')">Essay</button>
+          <button class="timer-mode-btn" onclick="setTypeFilter('allwork','discussion')">Discussion</button>
+          <button class="timer-mode-btn" onclick="setTypeFilter('allwork','hw')">Homework</button>
+        </div>
         <div id="allwork-list" style="display:none;"></div>
       </div>
 
@@ -979,6 +1007,16 @@ body {
           <div class="empty-sub">Sync your Canvas account in Settings first.</div>
         </div>
         <div id="priority-list"></div>
+        <div class="section-label" style="margin-top:20px;">Study Timer</div>
+        <div class="timer-wrap">
+          <div class="timer-modes">
+            <button class="timer-mode-btn active" onclick="setTimerMode(25,'Focus')">Focus 25m</button>
+            <button class="timer-mode-btn" onclick="setTimerMode(5,'Short break')">Short 5m</button>
+            <button class="timer-mode-btn" onclick="setTimerMode(15,'Long break')">Long 15m</button>
+          </div>
+          <div class="timer-display" id="timer-display">25:00</div>
+          <button class="timer-start-btn" id="timer-start-btn" onclick="toggleTimer()">Start</button>
+        </div>
       </div>
 
       <!-- GRADES -->
@@ -992,6 +1030,14 @@ body {
         <div id="grades-list" style="display:none;">
           <div class="section-label">Current grades</div>
           <div id="grades-cards"></div>
+          <div class="section-label" style="margin-top:20px;">GPA Calculator</div>
+          <div class="card" id="gpa-calc-wrap">
+            <div id="gpa-rows"></div>
+            <button class="sync-btn" style="margin-top:10px;" onclick="addGpaRow()">+ Add course</button>
+            <div id="gpa-result" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-size:15px;font-weight:600;color:var(--text1);">
+              Cumulative GPA: <span id="gpa-value" style="color:var(--accent);"></span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1470,6 +1516,7 @@ async function showApp() {
   loadGrades();
   renderGoalsTab();
   renderSelectedCoursesTab();
+  renderGpaRows();
   updateLastSyncedLabel();
   await autoSync();
   maybeShowWelcome();
@@ -2137,10 +2184,11 @@ function toggleDone(encodedKey, btn) {
 }
 
 function renderDueSoon(assignments) {
+  const filtered = applyTypeFilter('due', assignments);
   const today = new Date(); today.setHours(0,0,0,0);
   const weekFromNow = new Date(today); weekFromNow.setDate(today.getDate()+7);
   let overdue=[], soon=[], later=[];
-  assignments.forEach(a => {
+  filtered.forEach(a => {
     if (a.completed || doneSet.has(decodeURIComponent(doneKey(a)))) return;
     if (!a.due_date) { later.push(a); return; }
     const due = new Date(a.due_date); due.setHours(0,0,0,0);
@@ -2165,10 +2213,12 @@ function renderDueSoon(assignments) {
 
 function renderAllWork(assignments) {
   document.getElementById('allwork-list').style.display = 'block';
+  document.getElementById('allwork-filter-row').style.display = 'flex';
+  const filtered = applyTypeFilter('allwork', assignments);
   const today = new Date(); today.setHours(0,0,0,0);
   const weekFromNow = new Date(today); weekFromNow.setDate(today.getDate()+7);
   let overdue=[], soon=[], upcoming=[];
-  assignments.forEach(a => {
+  filtered.forEach(a => {
     if (a.completed || doneSet.has(decodeURIComponent(doneKey(a)))) return;
     if (!a.due_date) { upcoming.push(a); return; }
     const due = new Date(a.due_date); due.setHours(0,0,0,0);
@@ -2427,6 +2477,95 @@ function copyCalendarLink() {
     input.select(); input.setSelectionRange(0, 99999);
     document.execCommand('copy'); showCopied();
   }
+}
+
+// ── Study Timer ──────────────────────────────────────────────────────────────
+let timerInterval = null, timerRemaining = 25*60, timerRunning = false, timerLabel = 'Focus';
+
+function setTimerMode(mins, label) {
+  clearInterval(timerInterval); timerInterval = null; timerRunning = false;
+  timerRemaining = mins * 60; timerLabel = label;
+  document.getElementById('timer-display').textContent = fmtTimer(timerRemaining);
+  document.getElementById('timer-start-btn').textContent = 'Start';
+  document.querySelectorAll('.timer-mode-btn').forEach(b => b.classList.toggle('active', b.textContent.startsWith(label.split(' ')[0])));
+}
+
+function fmtTimer(s) { return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; }
+
+function toggleTimer() {
+  const btn = document.getElementById('timer-start-btn');
+  if (timerRunning) {
+    clearInterval(timerInterval); timerRunning = false; btn.textContent = 'Resume';
+  } else {
+    timerRunning = true; btn.textContent = 'Pause';
+    timerInterval = setInterval(() => {
+      if (timerRemaining <= 0) { clearInterval(timerInterval); timerRunning = false; btn.textContent = 'Start'; timerDone(); return; }
+      timerRemaining--;
+      document.getElementById('timer-display').textContent = fmtTimer(timerRemaining);
+    }, 1000);
+  }
+}
+
+function timerDone() {
+  try {
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator(); osc.connect(ctx.destination);
+    osc.frequency.value = 440; osc.start(); osc.stop(ctx.currentTime + 0.4);
+  } catch(e) {}
+  if (Notification.permission === 'granted') new Notification('StudyFlow', { body: `${timerLabel} session complete!` });
+  else if (Notification.permission !== 'denied') Notification.requestPermission();
+}
+
+// ── GPA Calculator ────────────────────────────────────────────────────────────
+const GPA_SCALE = {A:4.0,'A-':3.7,'B+':3.3,B:3.0,'B-':2.7,'C+':2.3,C:2.0,'C-':1.7,'D+':1.3,D:1.0,F:0.0};
+let gpaRows = [{grade:'A',credits:3}];
+
+function renderGpaRows() {
+  const grades = Object.keys(GPA_SCALE);
+  document.getElementById('gpa-rows').innerHTML = gpaRows.map((r,i) => `
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+      <select onchange="gpaRows[${i}].grade=this.value;calcGpa()" style="flex:1;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--input-bg);color:var(--text1);font-family:inherit;font-size:14px;">
+        ${grades.map(g=>`<option${g===r.grade?' selected':''}>${g}</option>`).join('')}
+      </select>
+      <input type="number" min="0" max="6" value="${r.credits}" placeholder="Credits"
+        oninput="gpaRows[${i}].credits=+this.value;calcGpa()"
+        style="width:80px;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--input-bg);color:var(--text1);font-family:inherit;font-size:14px;">
+      <button onclick="gpaRows.splice(${i},1);renderGpaRows();calcGpa();"
+        style="background:none;border:none;color:var(--text2);cursor:pointer;font-size:18px;line-height:1;padding:4px;">×</button>
+    </div>`).join('');
+  calcGpa();
+}
+
+function addGpaRow() { gpaRows.push({grade:'B',credits:3}); renderGpaRows(); }
+
+function calcGpa() {
+  const valid = gpaRows.filter(r => r.credits > 0);
+  const total = valid.reduce((s,r) => s + GPA_SCALE[r.grade]*r.credits, 0);
+  const creds = valid.reduce((s,r) => s + r.credits, 0);
+  const res = document.getElementById('gpa-result');
+  if (!creds) { res.style.display = 'none'; return; }
+  document.getElementById('gpa-value').textContent = (total/creds).toFixed(2);
+  res.style.display = 'block';
+}
+
+// ── Type Filters ──────────────────────────────────────────────────────────────
+const activeTypeFilter = { due: '', allwork: '' };
+
+function setTypeFilter(tab, type) {
+  activeTypeFilter[tab] = type;
+  const row = document.getElementById(`${tab}-filter-row`);
+  row.querySelectorAll('.timer-mode-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().startsWith(type || 'all')));
+  if (tab === 'due') renderDueSoon(cachedAssignments);
+  else renderAllWork(cachedAssignments);
+}
+
+function applyTypeFilter(tab, assignments) {
+  const type = activeTypeFilter[tab];
+  if (!type) return assignments;
+  return assignments.filter(a => {
+    const [, label] = getBadge(a.assignment_type);
+    return label.toLowerCase().startsWith(type === 'hw' ? 'homework' : type);
+  });
 }
 
 async function autoSync() {
