@@ -1107,8 +1107,9 @@ body {
             <button class="sync-btn" onclick="copyCalendarLink()">Copy calendar link</button>
             <div id="cal-copy-msg" style="font-size:13px;color:var(--accent);margin-top:6px;display:none;">Copied to clipboard!</div>
             <div class="settings-note" style="margin-top:12px;margin-bottom:0;">
-              <strong>Google Calendar:</strong> Other calendars → + → From URL → paste link<br>
-              <strong>Apple Calendar:</strong> File → New Calendar Subscription → paste link
+              <strong>Google Calendar (desktop):</strong> Other calendars → + → From URL → paste link<br>
+              <strong>Apple Calendar (desktop):</strong> File → New Calendar Subscription → paste link<br>
+              <strong>iPhone/iPad:</strong> Settings → Calendar → Accounts → Add Account → Other → Add Subscribed Calendar → paste link
             </div>
           </div>
         </div>
@@ -2391,12 +2392,18 @@ async function loadCalendarToken() {
 }
 
 function copyCalendarLink() {
-  const val = document.getElementById('cal-link-input').value;
-  navigator.clipboard.writeText(val).then(() => {
-    const msg = document.getElementById('cal-copy-msg');
-    msg.style.display = 'block';
-    setTimeout(() => { msg.style.display = 'none'; }, 2500);
-  });
+  const input = document.getElementById('cal-link-input');
+  const msg = document.getElementById('cal-copy-msg');
+  const showCopied = () => { msg.style.display = 'block'; setTimeout(() => { msg.style.display = 'none'; }, 2500); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(input.value).then(showCopied).catch(() => {
+      input.select(); input.setSelectionRange(0, 99999);
+      document.execCommand('copy'); showCopied();
+    });
+  } else {
+    input.select(); input.setSelectionRange(0, 99999);
+    document.execCommand('copy'); showCopied();
+  }
 }
 
 async function autoSync() {
