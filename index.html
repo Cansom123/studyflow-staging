@@ -1098,6 +1098,20 @@ body {
             </div>
           </div>
         </div>
+        <div class="section-label" style="margin-top:20px;">Calendar</div>
+        <div class="card">
+          <div class="card-sub" style="margin-bottom:12px;">Subscribe to your assignments in Google Calendar or Apple Calendar. Updates automatically when you sync Canvas.</div>
+          <div id="cal-link-loading" style="color:var(--text2);font-size:13px;">Loading…</div>
+          <div id="cal-link-wrap" style="display:none;">
+            <input class="settings-input" type="text" id="cal-link-input" readonly style="font-size:12px;font-family:monospace;color:var(--text2);margin-bottom:8px;" />
+            <button class="sync-btn" onclick="copyCalendarLink()">Copy calendar link</button>
+            <div id="cal-copy-msg" style="font-size:13px;color:var(--accent);margin-top:6px;display:none;">Copied to clipboard!</div>
+            <div class="settings-note" style="margin-top:12px;margin-bottom:0;">
+              <strong>Google Calendar:</strong> Other calendars → + → From URL → paste link<br>
+              <strong>Apple Calendar:</strong> File → New Calendar Subscription → paste link
+            </div>
+          </div>
+        </div>
         <div class="section-label" style="margin-top:20px;">Help</div>
         <div class="card">
           <button class="help-toggle-btn" onclick="toggleCanvasHelp()">
@@ -1320,6 +1334,7 @@ function isCourseTermConcluded(name) {
 let doneSet = new Set();
 let cachedAssignments = [];
 let cachedGrades = [];
+let syncInProgress = false;
 
 const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -1437,18 +1452,19 @@ function dismissWelcome() {
   setTimeout(() => { toast.style.display = 'none'; }, 400);
 }
 
-function showApp() {
+async function showApp() {
   hideAll();
   document.getElementById('main-app').style.display = 'block';
   document.getElementById('account-email').textContent = USER_EMAIL;
   doneSet = new Set(JSON.parse(localStorage.getItem('sf_done_' + USER_ID) || '[]'));
   loadCanvasSettings();
+  loadCalendarToken();
   loadAssignments();
   loadGrades();
   renderGoalsTab();
   renderSelectedCoursesTab();
   updateLastSyncedLabel();
-  autoSync();
+  await autoSync();
   maybeShowWelcome();
 }
 
@@ -1895,9 +1911,13 @@ function toggleSettingsCanvasHelp() {
 }
 
 async function syncCanvas() {
+  if (syncInProgress) return;
+  syncInProgress = true;
   const btn = document.getElementById('sync-btn');
   const statusEl = document.getElementById('sync-status');
+  const wsBtn = document.getElementById('ws-sync-btn');
   if (btn) { btn.disabled = true; btn.classList.add('btn-loading'); }
+  if (wsBtn) { wsBtn.disabled = true; }
   if (statusEl) { statusEl.className = 'sync-status'; statusEl.textContent = ''; }
   try {
     // Ensure we have a fresh token before calling the edge function
@@ -1912,7 +1932,9 @@ async function syncCanvas() {
     await Promise.all([loadAssignments(), loadGrades()]);
     localStorage.setItem('sf_last_sync', Date.now());
     updateLastSyncedLabel();
+    syncInProgress = false;
     if (btn) { btn.disabled = false; btn.classList.remove('btn-loading'); }
+    if (wsBtn) { wsBtn.disabled = false; }
     if (statusEl) {
       const blocked = result.blocked_courses || 0;
       const notFound = Array.isArray(result.not_found_courses) ? result.not_found_courses : [];
@@ -1939,7 +1961,9 @@ async function syncCanvas() {
       statusEl.style.whiteSpace = 'pre-wrap';
     }
   } catch(err) {
+    syncInProgress = false;
     if (btn) { btn.disabled = false; btn.classList.remove('btn-loading'); }
+    if (wsBtn) { wsBtn.disabled = false; }
     if (statusEl) { statusEl.className = 'sync-status error'; statusEl.textContent = `Sync failed: ${err.message}`; }
   }
 }
@@ -2349,6 +2373,29 @@ function updateLastSyncedLabel() {
   else if (mins < 60) syncStr = `Synced ${mins}m ago`;
   else { const h = Math.floor(mins / 60); syncStr = `Synced ${h}h ago`; }
   dateEl.textContent = `${dateStr} Â· ${syncStr}`;
+}
+
+async function loadCalendarToken() {
+  const loadingEl = document.getElementById('cal-link-loading');
+  const wrapEl = document.getElementById('cal-link-wrap');
+  const { ok, data } = await sbFetchWithRetry(`/rest/v1/user_settings?user_id=eq.${USER_ID}&select=calendar_token`);
+  let token = ok && data && data.length > 0 ? data[0].calendar_token : null;
+  if (!token) {
+    token = crypto.randomUUID();
+    await sbFetchWithRetry(`/rest/v1/user_settings?user_id=eq.${USER_ID}`, 'PATCH', { calendar_token: token });
+  }
+  document.getElementById('cal-link-input').value = `${SB_URL}/functions/v1/calendar-feed?token=${token}`;
+  if (loadingEl) loadingEl.style.display = 'none';
+  if (wrapEl) wrapEl.style.display = 'block';
+}
+
+function copyCalendarLink() {
+  const val = document.getElementById('cal-link-input').value;
+  navigator.clipboard.writeText(val).then(() => {
+    const msg = document.getElementById('cal-copy-msg');
+    msg.style.display = 'block';
+    setTimeout(() => { msg.style.display = 'none'; }, 2500);
+  });
 }
 
 async function autoSync() {
